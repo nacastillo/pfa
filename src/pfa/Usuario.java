@@ -41,5 +41,17 @@ public abstract class Usuario implements Serializable {
         return u;    
     }
     
+    public boolean esDeRol(String t) {
+        String s = this.getClass().getSimpleName();
+        return s.equals(t);
+    }
+    
+    public boolean esInves() {
+        return true;
+    }
+    
+    public boolean esVigi() {
+        return true;
+    }
     public abstract void menu(Sistema s);
 }

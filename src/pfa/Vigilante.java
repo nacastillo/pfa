@@ -71,7 +71,13 @@ public class Vigilante extends Usuario implements Serializable {
             System.out.println("1) Consultar sucursales asignadas");
             System.out.println("2) Consultar fechas asignadas");
             System.out.println("0) Salir del sistema");
-            i = leerEntero();
+            try {
+                i = leerEntero();
+            }
+            catch (Exception ex) {
+                System.out.println("Por favor ingrese una opcion correcta");
+                i = -1;
+            }
             switch (i) {
                 case 1: 
                 case 2:

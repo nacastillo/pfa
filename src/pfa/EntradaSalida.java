@@ -13,14 +13,14 @@ public class EntradaSalida {
     
     public static int leerEntero (String texto) {
         Scanner s = new Scanner(System.in);
-        System.out.println(texto);
+        System.out.print(texto);
         int i = s.nextInt();
         return i;
     }
     
     public static int leerDia (String texto) {
         Scanner s = new Scanner(System.in);
-        System.out.println(texto);
+        System.out.print(texto);
         int i = s.nextInt();
         return i;    
     }
@@ -33,7 +33,7 @@ public class EntradaSalida {
     
     public static String leerCadena (String texto) {
         Scanner s = new Scanner(System.in);
-        System.out.println(texto);
+        System.out.print(texto);
         String cad = s.nextLine();
         return cad;
     }
@@ -44,7 +44,7 @@ public class EntradaSalida {
         int anio;
         Fecha f;
         StringTokenizer s;
-        System.out.println(texto);
+        System.out.print(texto);
         String fechaTexto = leerCadena();
         s = new StringTokenizer(fechaTexto,"/");
         dia = Integer.parseInt(s.nextToken());

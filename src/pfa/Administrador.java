@@ -23,28 +23,28 @@ public class Administrador extends Usuario {
             "7) Agregar detenido\n" +
             "8) Listar detenidos\n" +
             "9) Leer fecha\n" +
+            "10) prguntar rol del user " +
             "0) Salir");
-            i = leerEntero();
+            try {
+                i = leerEntero();
+            }
+            catch (Exception ex) {
+                System.out.println("Por favor, ingrese una opcion correcta");
+                i = -1;
+            }
             switch (i) {
-                case 1: s.agregarEntidad();
-                        break;
-                case 2: s.listarEntidades();
-                        break;
-                case 3: s.aniadirVigilante();
-                        break;
-                case 4: s.aniadirInves();
-                        break;
-                case 5: s.aniadirAdmin();
-                        break;
-                case 6: s.listarUsuarios();
-                        break;
-                case 7: s.ingresarDetenido();
-                        break;
-                case 8: s.listarDetenidos();
-                        break;
-                case 9: Fecha f = leerFecha("Por favor, ingrese la fecha en formato DD/MM/AAAA");
-                        f.mostrarFecha();
-                        break;
+                case 1 -> s.agregarEntidad();
+                case 2 -> s.listarEntidades();
+                case 3 -> s.aniadirVigilante();
+                case 4 -> s.aniadirInves();
+                case 5 -> s.aniadirAdmin();
+                case 6 -> s.listarUsuarios();
+                case 7 -> s.ingresarDetenido();
+                case 8 -> s.listarDetenidos();
+                case 9 -> {
+                    Fecha f = leerFecha("Por favor, ingrese la fecha en formato DD/MM/AAAA");
+                    f.mostrarFecha();
+                }
             }            
         } while (i != 0);    
     }      

@@ -25,8 +25,8 @@ public class Sistema implements Serializable {
     }    
     
     public void agregarEntidad () {
-        int codigo = leerEntero("Ingrese el codigo de la entidad");
-        String domicilio = leerCadena("Ingrese el domicilio de la entidad");
+        int codigo = leerEntero("Ingrese el codigo de la entidad: ");
+        String domicilio = leerCadena("Ingrese el domicilio de la entidad: ");
         Entidad e;
         System.out.printf("Los datos a ingresar son:\nCodigo: %d\nDomicilio: %s.\n",codigo,domicilio);
         e = new Entidad(codigo,domicilio);
@@ -35,7 +35,7 @@ public class Sistema implements Serializable {
     
     public void listarEntidades () {
         if (Entidades.isEmpty()) {
-            System.out.println("No hay entidades registradas");
+            System.out.println("No hay entidades registradas.");
         }
         else {
             System.out.println("Lista de entidades:");
@@ -46,13 +46,13 @@ public class Sistema implements Serializable {
     }
 
     public void ingresarDetenido () {
-        int cod = leerEntero("Ingrese el codigo numerico del detenido");
+        int cod = leerEntero("Ingrese el codigo numerico del detenido: ");
         Fecha fecha;
-        String nom = leerCadena("Ingrese el apellido del detenido");
-        String ape = leerCadena("Ingrese el nombre del detenido");
-        int dia = leerEntero("Ingrese el dia del asalto");
-        int mes = leerEntero("Ingrese el mes del asalto");
-        int anio = leerEntero("Ingrese el anio del asalto");
+        String nom = leerCadena("Ingrese el apellido del detenido: ");
+        String ape = leerCadena("Ingrese el nombre del detenido: ");
+        int dia = leerEntero("Ingrese el dia del asalto: ");
+        int mes = leerEntero("Ingrese el mes del asalto: ");
+        int anio = leerEntero("Ingrese el anio del asalto: ");
         fecha = new Fecha (dia,mes,anio);
         Detenido d = new Detenido (cod,ape,nom,fecha);
         Detenidos.add(d);
@@ -60,7 +60,7 @@ public class Sistema implements Serializable {
     
     public void listarDetenidos () {
         if (Detenidos.isEmpty()) {
-            System.out.println("No hay detenidos ingresados");
+            System.out.println("No hay detenidos ingresados.");
         }
         else {
             for (Detenido d : Detenidos) {
@@ -73,30 +73,30 @@ public class Sistema implements Serializable {
     }
     
     public void altaBanda (ArrayList <Banda> Bandas) {
-        int n = leerEntero("Ingrese el codigo numérico de la banda");
+        int n = leerEntero("Ingrese el codigo numérico de la banda: ");
         Banda b = new Banda (n);
         Bandas.add(b);        
     }   
     
     public void aniadirVigilante() {
-        String usr = leerCadena("Ingrese el usuario");
-        String pwd = leerCadena("Ingrese la clave");
-        int cod = leerEntero("Ingrese el codigo del vigilante");
-        int edad = leerEntero("Ingrese la edad del vigilante");
+        String usr = leerCadena("Ingrese el usuario: ");
+        String pwd = leerCadena("Ingrese la clave: ");
+        int cod = leerEntero("Ingrese el codigo del vigilante: ");
+        int edad = leerEntero("Ingrese la edad del vigilante: ");
         Usuario u = new Vigilante(usr,pwd,cod,edad);   
         Usuarios.add(u);
     }
     
     public void aniadirInves () {
-        String usr = leerCadena("Ingrese el usuario");
-        String pwd = leerCadena("Ingrese la clave");
+        String usr = leerCadena("Ingrese el usuario: ");
+        String pwd = leerCadena("Ingrese la clave: ");
         Usuario u = new Investigador(usr,pwd);
         Usuarios.add(u);
     }
     
     public void aniadirAdmin () {
-        String usr = leerCadena("Ingrese el usuario");
-        String pwd = leerCadena("Ingrese la clave");
+        String usr = leerCadena("Ingrese el usuario: ");
+        String pwd = leerCadena("Ingrese la clave: ");
         Usuario u = new Administrador(usr,pwd);
         Usuarios.add(u);
     }
@@ -115,8 +115,8 @@ public class Sistema implements Serializable {
     }
     
     public Usuario login () throws NullPointerException {
-        String usr = leerCadena("Ingrese el usuario");
-        String pwd = leerCadena("Ingrese la clave");
+        String usr = leerCadena("Ingrese el usuario: ");
+        String pwd = leerCadena("Ingrese la clave: ");
         Usuario u = buscarUsuario(usr,pwd);        
         return u;
     }

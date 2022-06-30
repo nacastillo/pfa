@@ -25,7 +25,13 @@ public class Investigador extends Usuario implements Serializable {
             "7) Consultar detenidos ingresados\n" +
             "8) Consultar delitos ingresados\n\n\n" +
             "0) Salir");
-            i = leerEntero();
+            try {
+                i = leerEntero();
+            }
+            catch (Exception ex) {
+                System.out.println("Por favor ingrese una opcion correcta");
+                i = -1;
+            }               
             switch (i) {
                 case 1:
                 case 2:
