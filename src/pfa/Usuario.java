@@ -1,6 +1,7 @@
 package pfa;
 
 import java.io.*;
+import static pfa.EntradaSalida.*;
 
 public abstract class Usuario implements Serializable {
     private String user;
@@ -14,16 +15,8 @@ public abstract class Usuario implements Serializable {
         pass = p;
     }
     
-    public String getUser () {
-        return user;    
-    }
-    
-    public String getPass () {
-        return pass;
-    }
-    
-    public void mostrarUsuario () {
-        System.out.println("Usuario: " + getUser() + ", Clave: " + getPass());
+    public void mostrarUsuarioConClave () {
+        mostrarMsjLn("Usuario: " + user + ", clave: " + pass);
     }
     
     public void serializar (String nom) throws IOException {
@@ -40,18 +33,43 @@ public abstract class Usuario implements Serializable {
         o.close();
         return u;    
     }
-    
-    public boolean esDeRol(String t) {
-        String s = this.getClass().getSimpleName();
-        return s.equals(t);
-    }
-    
-    public boolean esInves() {
-        return true;
-    }
-    
-    public boolean esVigi() {
-        return true;
-    }
+        
     public abstract void menu(Sistema s);
+    
+    /**
+     * agregado 4to commit
+     */
+    
+    public boolean esUsername (String usr) {
+        return user.equals(usr);
+    }
+    
+    public boolean esSuPass (String pwd) {
+        return user.equals(pwd);
+    }   
+    
+    public String esDeRol() {
+        return this.getClass().getSimpleName();
+    }
+    
+    public void mostrarUsuarioConRol () {
+        mostrarMsjLn("Usuario: " + user + ", rol: "  + esDeRol());
+    }
+    
+    public void mostrarUsuario () {
+        mostrarMsjLn(user);    
+    }
+    
+    public boolean esVigi () {
+        return this.getClass().getSimpleName().equals("Vigilante");
+    }
+    
+    public boolean esInves () {
+        return this.getClass().getSimpleName().equals("Investigador");
+    }
+    
+    public boolean esAdmin () {
+        return this.getClass().getSimpleName().equals("Administrador");
+    }    
+    
 }

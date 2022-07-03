@@ -46,6 +46,10 @@ public class Vigilante extends Usuario implements Serializable {
         return codVig;
     }
     
+    public boolean esCodVig (Integer cod) {
+        return cod.equals(codVig);
+    }
+    
     public String infoVig () {
         if (portaArma) {
             return ("Codigo de vigilante: " + codVig +
@@ -71,6 +75,10 @@ public class Vigilante extends Usuario implements Serializable {
             System.out.println("1) Consultar sucursales asignadas");
             System.out.println("2) Consultar fechas asignadas");
             System.out.println("0) Salir del sistema");
+            System.out.println("4) es vigilante");
+            System.out.println("5) es inv");
+            System.out.println("6) es admin");
+            
             try {
                 i = leerEntero();
             }
@@ -79,10 +87,10 @@ public class Vigilante extends Usuario implements Serializable {
                 i = -1;
             }
             switch (i) {
-                case 1: 
-                case 2:
-                case 3: System.out.println("A implementar");
-                        break;
+                case 1, 2, 3 -> System.out.println("A implementar");
+                case 4 -> System.out.println(esVigi());
+                case 5 -> System.out.println(esInves());
+                case 6 -> System.out.println(esAdmin());                
             }
         } while (i != 0);        
     }    

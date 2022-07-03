@@ -1,30 +1,31 @@
+/**
+ * 4to commit: se borra uno de los constructores de detenido
+ * que no recibe codbanda como parametro
+ */
+
 package pfa;
 
-public class Detenido {
+import java.io.*;
+
+public class Detenido implements Serializable {
     private int codigo;
     private String nombreCompleto;
-    private Banda banda;
+    private int codBanda;
     private Fecha fechaAsalto;
 		
-    public Detenido (int codigo, String apellido, String nombre, Fecha fechaAsalto) {
-        this.codigo = codigo;
-	nombreCompleto = apellido + ", " + nombre;		
-	this.fechaAsalto = fechaAsalto;
-    }		
-
-    public Detenido(int codigo, String apellido, String nombre, Banda banda, Fecha fechaAsalto) {
+    public Detenido(int codigo, String apellido, String nombre, int codBanda, Fecha fechaAsalto) {
         this.codigo = codigo;
         nombreCompleto = apellido + ", " + nombre;
-        this.banda = banda;
+        this.codBanda = codBanda;
         this.fechaAsalto = fechaAsalto;
     }
     
-    public void setBanda(Banda banda) {
-        this.banda = banda;
+    public void setBanda(int codBanda) {
+        this.codBanda = codBanda;
     }
     
     public void mostrarDetenido() {
-        if (banda == null) {
+        if (codBanda == 0) {
             System.out.println("Codigo: " + codigo + 
                                "; nombre: " + nombreCompleto + 
                                "; fecha del delito" + fechaAsalto +
@@ -34,7 +35,22 @@ public class Detenido {
             System.out.println("Codigo: " + codigo + 
                                "; nombre: " + nombreCompleto + 
                                "; fecha del delito" + fechaAsalto +
-                               "; banda asignada:" + banda);
+                               "; banda asignada:" + codBanda);
         }
     }
+    
+    public void serializar(String nom) throws IOException {
+        ObjectOutputStream o =
+        new ObjectOutputStream (new BufferedOutputStream (new FileOutputStream (nom)));
+        o.writeObject(this);
+        o.close();
+    }
+    
+    public Detenido deSerializar (String nom) throws IOException, ClassNotFoundException {
+        ObjectInputStream o =
+        new ObjectInputStream (new BufferedInputStream (new FileInputStream (nom)));
+        Detenido d = (Detenido) o.readObject();
+        o.close();    
+        return d;
+    }   
 }

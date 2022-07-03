@@ -11,7 +11,7 @@ public class Administrador extends Usuario {
     
     @Override
     public void menu (Sistema s) {
-        int i;
+        int i,j;
         do {
             System.out.println("Seleccione una opción\n" +
             "1) Agregar entidad\n" +
@@ -19,11 +19,15 @@ public class Administrador extends Usuario {
             "3) Agregar vigilante\n" +        
             "4) Agregar investigador\n" +
             "5) Agregar administrador\n" +
-            "6) Listar usuarios\n" +
-            "7) Agregar detenido\n" +
-            "8) Listar detenidos\n" +
-            "9) Leer fecha\n" +
-            "10) prguntar rol del user " +
+            "6) Listar usuarios con clave\n" +
+            "7) Listar usuarios con rol\n" +
+            "8) Agregar detenido\n" +
+            "9) Listar detenidos\n" +
+            "10) Leer fecha\n" +
+            "11) Buscar vigilante por codigo\n" +
+            "12) Agregar sucursal a entidad\n" +
+            "13) Listar entidades con sucursales\n" +        
+            "\n\n" +
             "0) Salir");
             try {
                 i = leerEntero();
@@ -35,17 +39,31 @@ public class Administrador extends Usuario {
             switch (i) {
                 case 1 -> s.agregarEntidad();
                 case 2 -> s.listarEntidades();
-                case 3 -> s.aniadirVigilante();
-                case 4 -> s.aniadirInves();
-                case 5 -> s.aniadirAdmin();
-                case 6 -> s.listarUsuarios();
-                case 7 -> s.ingresarDetenido();
-                case 8 -> s.listarDetenidos();
-                case 9 -> {
+                case 3 -> s.agregarVigi();
+                case 4 -> s.agregarInves();
+                case 5 -> s.agregarAdmin();
+                case 6 -> s.listarUsuariosConClave();
+                case 7 -> s.listarUsuariosConRol();
+                case 8 -> s.agregarDetenido();
+                case 9 -> s.listarDetenidos();
+                case 10 -> {
                     Fecha f = leerFecha("Por favor, ingrese la fecha en formato DD/MM/AAAA");
                     f.mostrarFecha();
+                }                
+                case 11 -> {
+                    try {
+                        j = leerEntero("Ingrese un codigo de vigilante: ");
+                        Vigilante v = s.buscarVig(j);                    
+                        v.mostrarUsuario();
+                    }
+                    catch (NullPointerException ex) {
+                        System.out.println("No se encontró vigilante con ese codigo");
+                    }                
                 }
-            }            
+                case 12 -> s.agregarSucursalAEntidad();
+                case 13 -> s.listarEntidadesCompleto();
+                
+           }            
         } while (i != 0);    
     }      
 }

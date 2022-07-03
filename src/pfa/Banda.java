@@ -39,4 +39,11 @@ public class Banda implements Serializable {
         o.close();    
     }
     
+    public Banda deSerializar (String nom) throws IOException, ClassNotFoundException {
+        ObjectInputStream o =
+        new ObjectInputStream (new BufferedInputStream (new FileInputStream (nom)));
+        Banda b = (Banda) o.readObject();
+        o.close();
+        return b;
+    }        
 }

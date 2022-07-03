@@ -1,34 +1,53 @@
+/**
+     * agregado 4to commit:
+     * borrados getSucursales() y getCodEnt()
+     * agregados listarSucursales()
+     */
+
 package pfa;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.util.*;
+import static pfa.EntradaSalida.*;
 
 public class Entidad implements Serializable {
-    private final int codEnt;
-    private final String domEnt;
-    private ArrayList <Sucursal> Sucursales;
+    private int codEnt;
+    private String domEnt;
+    private List <Sucursal> sucursales;
 
     public Entidad (int codEnt, String domEnt) {
             this.codEnt = codEnt;
             this.domEnt = domEnt;
-            Sucursales = new ArrayList <> ();
+            sucursales = new ArrayList <> ();
     }
 
-    public int getCodEnt() {
-        return codEnt;
-    }
-
-    public void agregarSucursal (int c, String d) {
-        Sucursal s = new Sucursal(c,d);
-        Sucursales.add(s);			
-    }
-    
-    public ArrayList <Sucursal> getSucursales () {
-        return Sucursales;
+    public void agregarSucursal () {
+        int cod = leerEntero("Ingrese el codigo de la sucursal: ");
+        String dom = leerCadena("Ingrese el domicilio de la sucursal: ");
+        int cantEmpl = leerEntero("Ingrese la cantidad de empleados de la sucursal: ");
+        Sucursal s = new Sucursal(cod,dom,cantEmpl);
+        sucursales.add(s);			
     }
     
+    public boolean esEntidad (int cod) {
+        return (cod == codEnt);
+    }
+        
     public void mostrarEntidad () {
-        System.out.println("Codigo de entidad: " + codEnt + ", Domicilio: " + domEnt + ".");
+        System.out.println("Codigo de entidad: " + codEnt +
+                           ", Domicilio: " + domEnt + ".");
+    }
+    
+    public void listarSucursales () {
+        if (sucursales.isEmpty()) {
+            System.out.println("No hay sucursales ingresadas");
+        }
+        else {
+            System.out.println("Sucursales:");
+            for (Sucursal s : sucursales) {
+                s.mostrarSucursal();
+            }
+        }   
     }
     
     public void serializar (String nom) throws IOException {
@@ -42,6 +61,5 @@ public class Entidad implements Serializable {
         Entidad e = (Entidad) o.readObject();
         o.close();
         return e;
-    }
-    
+    }    
 }

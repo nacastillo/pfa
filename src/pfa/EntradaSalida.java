@@ -1,3 +1,7 @@
+/**
+ * agregado mostrarMsjLn (sout ln) y mostrarMsjPf (printf)
+ */
+
 package pfa;
 
 import java.util.Scanner;
@@ -13,14 +17,14 @@ public class EntradaSalida {
     
     public static int leerEntero (String texto) {
         Scanner s = new Scanner(System.in);
-        System.out.print(texto);
+        mostrarMsj(texto);
         int i = s.nextInt();
         return i;
     }
     
     public static int leerDia (String texto) {
         Scanner s = new Scanner(System.in);
-        System.out.print(texto);
+        mostrarMsj(texto);
         int i = s.nextInt();
         return i;    
     }
@@ -33,7 +37,7 @@ public class EntradaSalida {
     
     public static String leerCadena (String texto) {
         Scanner s = new Scanner(System.in);
-        System.out.print(texto);
+        mostrarMsj(texto);
         String cad = s.nextLine();
         return cad;
     }
@@ -44,7 +48,7 @@ public class EntradaSalida {
         int anio;
         Fecha f;
         StringTokenizer s;
-        System.out.print(texto);
+        mostrarMsj(texto);
         String fechaTexto = leerCadena();
         s = new StringTokenizer(fechaTexto,"/");
         dia = Integer.parseInt(s.nextToken());
@@ -52,5 +56,17 @@ public class EntradaSalida {
         anio = Integer.parseInt(s.nextToken());
         f = new Fecha(dia,mes,anio);
         return f;
+    }
+    
+    public static void mostrarMsjLn (String cad) {
+        System.out.println(cad);
+    }
+    
+    public static void mostrarMsjPf (String cad, Object ... args) {
+        System.out.printf(cad, args);
+    }    
+    
+    public static void mostrarMsj (String cad) {
+        System.out.print(cad);
     }
 }

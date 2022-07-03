@@ -23,7 +23,11 @@ public class Investigador extends Usuario implements Serializable {
             "5) Consultar bandas ingresadas\n" +
             "6) Consultar jueces ingresados\n" +
             "7) Consultar detenidos ingresados\n" +
-            "8) Consultar delitos ingresados\n\n\n" +
+            "8) Consultar delitos ingresados\n" +
+            "9) esVigi\n" +
+            "10) esInves\n" +
+            "11) esAdmin\n" +                    
+            "\n\n" +
             "0) Salir");
             try {
                 i = leerEntero();
@@ -33,32 +37,16 @@ public class Investigador extends Usuario implements Serializable {
                 i = -1;
             }               
             switch (i) {
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                case 8: System.out.println("A implementar");
-                        break;
+                case 1, 2, 3, 4, 5, 6, 7, 8 -> System.out.println("A implementar");
+                case 9 ->  System.out.println(esVigi());
+                case 10 -> System.out.println(esInves());
+                case 11 -> System.out.println(esAdmin());
             }       
         } while (i != 0);
     }   
-    
-    @Override
-    public void serializar (String nom) throws IOException {
-        ObjectOutputStream o = 
-        new ObjectOutputStream (new BufferedOutputStream (new FileOutputStream (nom)));
-        o.writeObject(this);
-        o.close();
-    }  
-    
-    public Investigador deSerializar (String nom) throws IOException, ClassNotFoundException {
-        ObjectInputStream o = 
-        new ObjectInputStream (new BufferedInputStream (new FileInputStream (nom)));
-        Investigador i = (Investigador) o.readObject();
-        o.close();
-        return i;
-    }
+    /**
+     * removido serializar y deserializar (ya implementado en Usuario)
+     * @param nom
+     * @throws IOException 
+     */    
 }
