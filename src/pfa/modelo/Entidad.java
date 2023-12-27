@@ -4,11 +4,12 @@
      * agregados listarSucursales()
      */
 
-package pfa;
+package pfa.modelo;
+
+import static pfa.modelo.EntradaSalida.*;
 
 import java.io.*;
 import java.util.*;
-import static pfa.EntradaSalida.*;
 
 public class Entidad implements Serializable {
     private int codEnt;
@@ -25,8 +26,8 @@ public class Entidad implements Serializable {
         int cod = leerEntero("Ingrese el codigo de la sucursal: ");
         String dom = leerCadena("Ingrese el domicilio de la sucursal: ");
         int cantEmpl = leerEntero("Ingrese la cantidad de empleados de la sucursal: ");
-        Sucursal s = new Sucursal(cod,dom,cantEmpl);
-        sucursales.add(s);			
+        sucursales.add(new Sucursal(cod,dom,cantEmpl));
+        	
     }
     
     public boolean esEntidad (int cod) {
@@ -35,7 +36,8 @@ public class Entidad implements Serializable {
         
     public void mostrarEntidad () {
         System.out.println("Codigo de entidad: " + codEnt +
-                           ", Domicilio: " + domEnt + ".");
+                           ", Domicilio: " + domEnt + 
+                           ".");
     }
     
     public void listarSucursales () {

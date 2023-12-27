@@ -1,4 +1,4 @@
-package pfa;
+ package pfa.modelo;
 
 import java.io.*;
 

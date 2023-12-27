@@ -1,7 +1,8 @@
-package pfa;
+package pfa.modelo;
+
+import static pfa.modelo.EntradaSalida.*;
 
 import java.io.*;
-import static pfa.EntradaSalida.*;
 
 public abstract class Usuario implements Serializable {
     private String user;
@@ -13,6 +14,10 @@ public abstract class Usuario implements Serializable {
 		
     public void setPass (String p) {
         pass = p;
+    }
+    
+    public String getUser () {
+        return user;
     }
     
     public void mostrarUsuarioConClave () {
@@ -32,20 +37,14 @@ public abstract class Usuario implements Serializable {
         Usuario u = (Usuario) o.readObject();
         o.close();
         return u;    
-    }
-        
-    public abstract void menu(Sistema s);
+    }    
     
-    /**
-     * agregado 4to commit
-     */
-    
-    public boolean esUsername (String usr) {
+    public boolean esUsr (String usr) {
         return user.equals(usr);
     }
     
-    public boolean esSuPass (String pwd) {
-        return user.equals(pwd);
+    public boolean esPwd (String pwd) {
+        return pass.equals(pwd);
     }   
     
     public String esDeRol() {
@@ -70,6 +69,7 @@ public abstract class Usuario implements Serializable {
     
     public boolean esAdmin () {
         return this.getClass().getSimpleName().equals("Administrador");
-    }    
-    
+    }     
+        
+    public abstract int menuPrincipal(Sistema s);
 }
