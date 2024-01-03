@@ -2,17 +2,19 @@ package pfa;
 
 import static pfa.modelo.EntradaSalida.*;
 
+import static spark.Spark.*;
+
 import java.io.*;
 
 import pfa.modelo.Sistema;
-import pfa.vista.Vista;
+//import pfa.vista.Vista;
 
 public class Main {
     
     public static void main (String[] args) {
-        Vista v = new Vista();
+        // Vista v = new Vista();
         Sistema s = new Sistema();
-        int op;        
+        int op = 1;        
         try {
             s = s.deSerializar("hola.txt");
         }
@@ -25,20 +27,13 @@ public class Main {
             s.defaultAdmin();
         }
         do {
+            port(2000);
+            get("/", (req, res) -> {
+                return "<p>TEST</p>";
+            });
             op = s.menuLogin();
         }
         while (op == 0);
-        s.grabarSistema();
-        /*
-        try {
-            s.serializar("hola.txt");
-        }
-        catch (IOException ex) {
-            System.out.println("Problemas al grabar sistema");        
-        } 
-        */
-        /**
-         * eliminado el bloque try catch de NullPointerException ya que login2 no puede arrojar dicha excepcion
-         */
+        s.grabarSistema();        
     }    
 }

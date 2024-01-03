@@ -23,7 +23,7 @@ public class ListaDeDelitos implements Serializable {
      */    
     public void asignarCondena(){
         try {
-            int cod = leerEntero("Ingrese el codigo del delito a buscar");
+            // int cod = leerEntero("Ingrese el codigo del delito a buscar");
             Delito d = buscarDelito();
             int dias = leerEntero("Ingrese la cantidad de dias de condena: ");
             d.setCondena(true);

@@ -24,7 +24,7 @@ public class Delito implements Serializable {
         this.codSucursalAsaltada = codSucursalAsaltada;
         this.fechaDelito = fechaDelito;
         diasCondena = 0;
-	condena = false;
+	    condena = false;
     }   
 
     public void setCondena(boolean condena) {
@@ -67,5 +67,11 @@ public class Delito implements Serializable {
         o.close();
         return d;
     }    
-       
+    
+    /*
+    @Override
+    public String toString () {
+        return "";
+    }
+    */
 }

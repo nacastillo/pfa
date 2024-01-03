@@ -1,33 +1,24 @@
 package pfa.modelo;
 
 import static pfa.modelo.EntradaSalida.*;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
-import javax.swing.JOptionPane;
-
-import pfa.vista.Vista;
 
 public class Sistema implements Serializable {
     private ListaDeEntidades entidades;
     private BaseDeUsuarios usuarios;
     private ListaDeDetenidos detenidos;
-    private List <Banda> Bandas;
+    private List <Banda> bandas;
     private ListaDeJueces jueces;
     private ListaDeDelitos delitos;
-    private Vista v;
-    private List <Servicio> servicios;
     
     public Sistema (){
         entidades = new ListaDeEntidades();
         usuarios = new BaseDeUsuarios();
         detenidos = new ListaDeDetenidos();
-        Bandas = new ArrayList <> ();
+        bandas = new ArrayList <> ();
         jueces = new ListaDeJueces();
         delitos = new ListaDeDelitos();
-        Vista v = new Vista();
     }    
         
     public void agregarEntidad () {
@@ -103,6 +94,18 @@ public class Sistema implements Serializable {
     public void agregarSucursalAEntidad () {
         entidades.agregarSucursalAEntidad();
     }
+
+    public void listarBandas () {
+        if (bandas.isEmpty()) {
+            mostrarMsjLn("No hay bandas ingresadas");
+        }
+        else {
+            for (Banda b : bandas) {
+                mostrarMsjLn("Lista de bandas: ");
+                b.toString();
+            }
+        }
+    }
     
     public void listarEntidadesCompleto () {
         entidades.listarEntidadesConSucursales();
@@ -112,6 +115,10 @@ public class Sistema implements Serializable {
         return usuarios.buscarVig(cod);
     }
     
+    public void listarJueces () {
+        jueces.listarJueces();
+    }
+
     public int menuLogin() {
         String pwd, usr = leerCadena("Ingrese su nombre de usuario: ");
         while(!usuarios.existeUsr(usr)) {
@@ -168,10 +175,12 @@ public class Sistema implements Serializable {
         return s;    
     }
 
+    /* 
     public void cargarMenues () {
-        v.agregarListeners(new jojo());
+        // v.agregarListeners(new jojo());
     }
     
+
     private class jojo implements ActionListener {
     
         @Override
@@ -196,5 +205,7 @@ public class Sistema implements Serializable {
             c = leerCadena("Presione S si el vigilante debe portar arma, de lo contrario pulse cualquier tecla para continuar: ").charAt(0);
             portaArma = (c == 's' || c == 'S');
         }    
-    }    
+    }
+    
+    */
 }
