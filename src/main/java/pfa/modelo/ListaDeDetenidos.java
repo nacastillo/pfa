@@ -1,10 +1,6 @@
-/**
- *
- * @author Nicolas
- */
-
 package pfa.modelo;
 
+import pfa.modelo.dto.Detenido;
 import java.util.*;
 
 import static pfa.modelo.EntradaSalida.*;
@@ -20,14 +16,13 @@ public class ListaDeDetenidos implements Serializable {
     
     public void agregarDetenido () {
         //pendiente de validacion
+        Integer i = leerEntero("Ingrese el ID del detenido: ");
         detenidos.add(new Detenido (
+                                   i.longValue(),
                                    leerEntero("Ingrese el codigo del detenido: "),
                                    leerCadena("Ingrese el nombre del detenido: "),
-                                   leerCadena("Ingrese el apellido del detenido: "),
-                                   leerEntero("Ingrese el codigo de la banda a la que pertenece el detenido (de no corresponder, ingrese 0): "),
-                                   leerFecha("Ingrese la fecha en la que fue detenido (formato DD/MM/AAAA): ")
-                                    )
-                    );        
+                                   null)
+        );                    
     }
     
     public void listarDetenidos () {

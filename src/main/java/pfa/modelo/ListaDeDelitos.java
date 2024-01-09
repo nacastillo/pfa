@@ -3,15 +3,20 @@
 */
 package pfa.modelo;
 
+import pfa.modelo.dto.Asalto;
 import java.util.*;
 
 import static pfa.modelo.EntradaSalida.*;
 
 import java.io.*;
+import java.time.LocalDate;
+import pfa.modelo.dto.Detenido;
+import pfa.modelo.dto.Juez;
+import pfa.modelo.dto.Sucursal;
 
 public class ListaDeDelitos implements Serializable {
     
-    private List <Delito> delitos;
+    private List <Asalto> delitos;
     
     public ListaDeDelitos () {
         delitos = new ArrayList <> ();    
@@ -21,13 +26,13 @@ public class ListaDeDelitos implements Serializable {
      * Asigna una condena expresada en un int.
      * @throws NullPointerException
      */    
-    public void asignarCondena(){
+    public void asignarCondena(){ // comentadas las lineas de setCondena
         try {
             // int cod = leerEntero("Ingrese el codigo del delito a buscar");
-            Delito d = buscarDelito();
+            Asalto d = buscarDelito();
             int dias = leerEntero("Ingrese la cantidad de dias de condena: ");
-            d.setCondena(true);
-            d.setDiasCondena(dias);
+            //d.setCondena(true);
+            //d.setDiasCondena(dias);
         }
         catch (NullPointerException ex) {
             mostrarMsjLn("No se encuentra el delito con el codigo ingresado");
@@ -36,14 +41,14 @@ public class ListaDeDelitos implements Serializable {
     }
     /**
      * Busca un detenido en la Lista de Detenidos
-     * @return Delito
+     * @return Asalto
      * @throws NullPointerException
      */
-    public Delito buscarDelito () throws NullPointerException {
-        int cod = leerEntero("Ingrese el numero del delito a buscar: ");        
-        Delito d = null;
-        for (Delito e : delitos) {
-            if (e.esDelito(cod)) {
+    public Asalto buscarDelito () throws NullPointerException {
+        Asalto d = null;
+        int cod = leerEntero("Ingrese el numero del delito a buscar: ");                
+        for (Asalto e : delitos) {
+            if (cod == e.getCodigo()) {
                 d = e;
                 break;            
             }
@@ -51,8 +56,9 @@ public class ListaDeDelitos implements Serializable {
         return d;
     }
     
-    public void addDelito (int i, int j, int e, int s, Fecha f) {
-        delitos.add(new Delito(i,j,e,s,f));
+    public void addDelito (Long i, Integer c, LocalDate fa, Sucursal sa, 
+            Juez j, Detenido d, LocalDate dc) {
+        delitos.add(new Asalto (i,c,fa,sa,j,d,dc));        
     }
     
     public void tieneCondena () {

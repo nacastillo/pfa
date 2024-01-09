@@ -4,6 +4,7 @@
  */
 package pfa.modelo;
 
+import pfa.modelo.dto.Juez;
 import java.util.*;
 
 import static pfa.modelo.EntradaSalida.*;

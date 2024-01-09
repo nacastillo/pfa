@@ -1,13 +1,15 @@
-package pfa.modelo;
+package pfa.modelo.dto;
 
+import pfa.modelo.Sistema;
+import pfa.modelo.dto.Usuario;
 import static pfa.modelo.Constantes.cadenaMenuInves;
 import static pfa.modelo.EntradaSalida.*;
 
 public class Investigador extends Usuario {
        
     public Investigador (String user, String pass) {
-        setUser(user);
-        setPass(pass);
+        setUsr(user);
+        setPwd(pass);
     }
     
     public int menuPrincipal (Sistema s) {

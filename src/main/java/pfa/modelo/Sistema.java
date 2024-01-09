@@ -1,8 +1,18 @@
 package pfa.modelo;
 
+import pfa.modelo.dto.Usuario;
 import static pfa.modelo.EntradaSalida.*;
 import java.io.*;
 import java.util.*;
+import pfa.modelo.BaseDeUsuarios;
+import pfa.modelo.Fecha;
+import pfa.modelo.ListaDeDelitos;
+import pfa.modelo.ListaDeDetenidos;
+import pfa.modelo.ListaDeEntidades;
+import pfa.modelo.ListaDeJueces;
+import pfa.modelo.dto.Banda;
+import pfa.modelo.dto.Usuario;
+import pfa.modelo.dto.Vigilante;
 
 public class Sistema implements Serializable {
     private ListaDeEntidades entidades;
@@ -19,6 +29,10 @@ public class Sistema implements Serializable {
         bandas = new ArrayList <> ();
         jueces = new ListaDeJueces();
         delitos = new ListaDeDelitos();
+    }    
+
+    public BaseDeUsuarios getUsuarios() {
+        return usuarios;
     }    
         
     public void agregarEntidad () {
@@ -50,13 +64,15 @@ public class Sistema implements Serializable {
         //validacion
         f = leerFecha("Ingrese la fecha del asalto: ");
         //validacion
-        delitos.addDelito(i, j, e, s, f);
+        // delitos.addDelito(i, j, e, s, f);
     }
         
     public void altaBanda (ArrayList <Banda> Bandas) {
-        int n = leerEntero("Ingrese el codigo numérico de la banda: ");
-        Banda b = new Banda (n);
-        Bandas.add(b);        
+        Integer i = leerEntero("Ingrese ID de la banda: ");
+        Integer n = leerEntero("Ingrese el número de la banda: ");        
+        String s = leerCadena("Ingrese el nombre de la banda: ");
+        Integer c = leerEntero("Ingrese la cantidad de miembros de la banda: ");        
+        Bandas.add(new Banda (i.longValue(),n,s,c));
     }   
     
     public void agregarVigi() {
@@ -135,7 +151,7 @@ public class Sistema implements Serializable {
         
     public void grabarSistema () {
         try {
-            serializar("hola.txt");
+            serializar("sistema.bin");
         }
         catch (IOException ex) {
             mostrarMsjLn("Problemas al grabar sistema"); 

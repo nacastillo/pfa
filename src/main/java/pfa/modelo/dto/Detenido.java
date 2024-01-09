@@ -1,29 +1,53 @@
-/**
- * 4to commit: se borra uno de los constructores de detenido
- * que no recibe codbanda como parametro
- */
-
-package pfa.modelo;
+package pfa.modelo.dto;
 
 import static pfa.modelo.EntradaSalida.*;
-
 import java.io.*;
 
 public class Detenido implements Serializable {
-    private int codigo;
+    private Long id;
+    private Integer codigo;
     private String nombreCompleto;
-    private int codBanda;
-    		
-    public Detenido(int codigo, String apellido, String nombre, int codBanda, Fecha fechaAsalto) {
+    private Banda banda;
+
+    public Detenido(Long id, Integer codigo, String nombreCompleto, Banda banda) {
+        this.id = id;
         this.codigo = codigo;
-        nombreCompleto = apellido + ", " + nombre;
-        this.codBanda = codBanda;        
+        this.nombreCompleto = nombreCompleto;
+        this.banda = banda;
+    }    
+
+    public Long getId() {
+        return id;
     }
-    
-    public void setBanda(int codBanda) {
-        this.codBanda = codBanda;
+
+    public void setId(Long id) {
+        this.id = id;
     }
-    
+
+    public Integer getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
+
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
+
+    public Banda getBanda () throws NullPointerException {
+        return banda;        
+    }
+
+    public void setBanda(Banda banda) {
+        this.banda = banda;
+    }        		
+        
     /**
      * Muestra al detenido con su codigo, nombre, fecha de delito
      * y banda si es que tiene asignada alguna.
@@ -35,7 +59,7 @@ public class Detenido implements Serializable {
                     ", nombre: " + nombreCompleto +
                     //", fecha del delito: " + fechaAsalto +
                     ", banda asignada: " + 
-                    (codBanda == 0 ? "ninguna." : codBanda)
+                    (banda == null ? "ninguna." : banda.getNombre())
                     );
     }
 

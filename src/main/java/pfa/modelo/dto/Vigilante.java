@@ -1,25 +1,27 @@
-package pfa.modelo;
+package pfa.modelo.dto;
 
+import pfa.modelo.Sistema;
+import pfa.modelo.dto.Usuario;
 import static pfa.modelo.Constantes.cadenaMenuVigis;
 import static pfa.modelo.EntradaSalida.*;
 
 public class Vigilante extends Usuario {
-    private int codVig,
-                edad;		
+    private Integer codigo;
+    private Integer edad;		
     
     public Vigilante (String user, String pass, int codVig, int edad) {
-        super.setUser(user);
-        super.setPass(pass);
-        this.codVig = codVig;
+        super.setUsr(user);
+        super.setPwd(pass);
+        this.codigo = codVig;
         this.edad = edad;
     }
     
     public int getCodVig () {
-        return codVig;
+        return codigo;
     }
     
     public boolean esCodVig (int cod) {
-        return codVig == cod;
+        return codigo == cod;
     }
     
     @Override
@@ -28,8 +30,8 @@ public class Vigilante extends Usuario {
      * @return String
      */
     public String toString () {
-        return "Usuario: " + getUser() +
-                ", codigo: " + codVig +
+        return "Usuario: " + getUsr() +
+                ", codigo: " + codigo +
                 ", edad: " + edad +
                 ".";
     }

@@ -3,6 +3,7 @@
  */
 package pfa.modelo;
 
+import pfa.modelo.dto.Entidad;
 import java.util.*;
 
 import static pfa.modelo.EntradaSalida.*;
@@ -18,9 +19,11 @@ public class ListaDeEntidades implements Serializable {
 
     public void agregarEntidad () {
         try {
-            int cod = leerEntero("Ingrese el codigo de la entidad: ");
-            String dom = leerCadena("Ingrese el domicilio de la entidad: ");
-            Entidad e = new Entidad(cod,dom);
+            Integer i = leerEntero ("Ingrese el ID del banco: ");
+            Integer cod = leerEntero("Ingrese el codigo del banco: ");
+            String dom = leerCadena("Ingrese el domicilio del banco: ");
+            String n = leerCadena("Ingrese el nombre del banco: ");
+            Entidad e = new Entidad(i.longValue(),cod,dom,n);
             mostrarMsjPf("Los datos a ingresar son:\n" +
                     "Codigo: %d\n" +
                     "Domicilio: %s.\n",cod,dom);

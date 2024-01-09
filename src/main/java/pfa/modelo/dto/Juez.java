@@ -1,17 +1,50 @@
 /**
  * asignarcondena y tiene condena se mueve a ListaDeDelitos
  */
-package pfa.modelo;
+package pfa.modelo.dto;
 
 import static pfa.modelo.EntradaSalida.*;
 
 import java.io.*;
 
 public class Juez {
-    private int claveInterna;
+    private Long id;
+    private Integer claveInterna;
     private String nombreCompleto;
-    private int aniosServicio;
+    private Integer aniosServicio;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Integer getClaveInterna() {
+        return claveInterna;
+    }
+
+    public void setClaveInterna(Integer claveInterna) {
+        this.claveInterna = claveInterna;
+    }
+
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
+
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
+
+    public Integer getAniosServicio() {
+        return aniosServicio;
+    }
+
+    public void setAniosServicio(Integer aniosServicio) {
+        this.aniosServicio = aniosServicio;
+    }
+    
     public Juez(int claveInterna, String nombreCompleto, int aniosServicio) {
         this.claveInterna = claveInterna;
         this.nombreCompleto = nombreCompleto;

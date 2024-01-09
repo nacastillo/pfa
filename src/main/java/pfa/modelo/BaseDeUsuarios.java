@@ -4,6 +4,10 @@
 
 package pfa.modelo;
 
+import pfa.modelo.dto.Vigilante;
+import pfa.modelo.dto.Investigador;
+import pfa.modelo.dto.Administrador;
+import pfa.modelo.dto.Usuario;
 import java.util.*;
 
 import static pfa.modelo.EntradaSalida.*;
@@ -25,7 +29,7 @@ public class BaseDeUsuarios implements Serializable {
     public void agregarVigi () {
         int edad, cod;
         String pwd, 
-               usr = leerCadena("Ingrese el nombre de usuario a crear: ");       
+               usr = leerCadena("Ingrese el nombre de usuario del vigilante a crear: ");       
         while (existeUsr(usr)) {
             usr = leerCadena("Nombre de usuario ya registrado, por favor intente con otro.");            
         }
@@ -47,7 +51,7 @@ public class BaseDeUsuarios implements Serializable {
         int edad, 
             cod;
         String pwd, 
-               usr = leerCadena("Ingrese el nombre de usuario a crear: ");       
+               usr = leerCadena("Ingrese el nombre de usuario del vigilante a crear: ");       
         while (existeUsr(usr)) {
             usr = leerCadena("Nombre de usuario ya registrado, por favor intente con otro: ");            
         }
@@ -66,7 +70,7 @@ public class BaseDeUsuarios implements Serializable {
      */
     public void agregarInves () {
         String pwd, 
-               usr = leerCadena("Ingrese el nombre de usuario a crear: ");
+               usr = leerCadena("Ingrese el nombre de usuario del investigador a crear: ");
         while (existeUsr(usr)) {
             usr = leerCadena("Nombre de usuario ya registrado, por favor intente con otro: ");            
         }
@@ -80,7 +84,7 @@ public class BaseDeUsuarios implements Serializable {
      */
     public void agregarAdmin () {
         String pwd, 
-               usr = leerCadena("Ingrese el nombre de usuario a crear: ");
+               usr = leerCadena("Ingrese el nombre de usuario del admin a crear: ");
         while (existeUsr(usr)) {
             usr = leerCadena("Nombre de usuario ya registrado, por favor intente con otro: ");            
         }

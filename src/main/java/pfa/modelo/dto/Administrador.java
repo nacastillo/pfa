@@ -1,6 +1,9 @@
-package pfa.modelo;
+package pfa.modelo.dto;
 
+import pfa.modelo.Sistema;
+import pfa.modelo.dto.Usuario;
 import java.io.IOException;
+import pfa.modelo.Fecha;
 
 import static pfa.modelo.Constantes.cadenaMenuAdmin;
 import static pfa.modelo.Constantes.cadenaMenuGestionUsuarios;
@@ -10,8 +13,8 @@ import static pfa.modelo.EntradaSalida.*;
 public class Administrador extends Usuario {
     
     public Administrador (String user, String pass) {
-        setUser(user);
-        setPass(pass);    
+        setUsr(user);
+        setPwd(pass);    
     }    
     
     public void menu (Sistema s) {
@@ -90,7 +93,7 @@ public class Administrador extends Usuario {
                         break;
                 case 9: 
                         try {
-                            s.serializar("hola.txt");                        
+                            s.serializar("sistema.bin");
                         }
                         catch (IOException ex) {
                             mostrarMsjLn("Error al grabar sistema.");                            

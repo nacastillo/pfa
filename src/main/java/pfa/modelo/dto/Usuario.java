@@ -1,27 +1,38 @@
-package pfa.modelo;
+package pfa.modelo.dto;
 
+import pfa.modelo.Sistema;
 import static pfa.modelo.EntradaSalida.*;
 
 import java.io.*;
 
 public abstract class Usuario implements Serializable {
-    private String user;
-    private String pass;
+    private Long id;
+    private String usr;
+    private String pwd;
+    private String rol;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }    
     
-    public void setUser (String u) {
-        user = u;
+    public void setUsr (String u) {
+        usr = u;
     }
 		
-    public void setPass (String p) {
-        pass = p;
+    public void setPwd (String p) {
+        pwd = p;
     }
     
-    public String getUser () {
-        return user;
+    public String getUsr () {
+        return usr;
     }
     
     public void mostrarUsuarioConClave () {
-        mostrarMsjLn("Usuario: " + user + ", clave: " + pass);
+        mostrarMsjLn("Usuario: " + usr + ", clave: " + pwd);
     }
     
     public void serializar (String nom) throws IOException {
@@ -40,11 +51,11 @@ public abstract class Usuario implements Serializable {
     }    
     
     public boolean esUsr (String usr) {
-        return user.equals(usr);
+        return this.usr.equals(usr);
     }
     
     public boolean esPwd (String pwd) {
-        return pass.equals(pwd);
+        return this.pwd.equals(pwd);
     }   
     
     public String esDeRol() {
@@ -52,11 +63,11 @@ public abstract class Usuario implements Serializable {
     }
     
     public void mostrarUsuarioConRol () {
-        mostrarMsjLn("Usuario: " + user + ", rol: "  + esDeRol());
+        mostrarMsjLn("Usuario: " + usr + ", rol: "  + esDeRol());
     }
     
     public void mostrarUsuario () {
-        mostrarMsjLn(user);    
+        mostrarMsjLn(usr);    
     }
     
     public boolean esVigi () {
