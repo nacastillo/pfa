@@ -1,55 +1,34 @@
 package pfa.modelo.dto;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.io.*;
+import lombok.Data;
 
+@Data
+@Entity
+@Table(name = "bandas")
 public class Banda implements Serializable {
-
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column (name = "id")
     private Long id;
+    
+    @Column (name = "numero")
     private Integer numero;
+    
+    @Column (name = "nombre")
     private String nombre;
+    
+    @Column (name = "cantidadMiembros")
     private Integer cantidadMiembros;
 
-    public Banda(Long id, Integer numero, String nombre, Integer cantidadMiembros) {
-        this.id = id;
-        this.numero = numero;
-        this.nombre = nombre;
-        this.cantidadMiembros = cantidadMiembros;
-    }   
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getNumero() {
-        return numero;
-    }
-
-    public void setNumero(Integer numero) {
-        this.numero = numero;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Integer getCantidadMiembros() {
-        return cantidadMiembros;
-    }
-
-    public void setCantidadMiembros(Integer cantidadMiembros) {
-        this.cantidadMiembros = cantidadMiembros;
-    }
-
     
-
     
     public void serializar(String nom) throws IOException {
         ObjectOutputStream o

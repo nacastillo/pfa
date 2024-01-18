@@ -1,7 +1,9 @@
 package pfa.modelo.dto;
 
 import java.time.LocalDate;
+import lombok.Data;
 
+@Data
 public class Contrato {
     
     private Long id;
@@ -19,53 +21,4 @@ public class Contrato {
         this.sucursal = sucursal;
         this.armado = armado;
     }    
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
-    }
-
-    public LocalDate getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-
-    public Usuario getVigilante() {
-        return vigilante;
-    }
-
-    public void setVigilante(Usuario vigilante) {
-        this.vigilante = vigilante;
-    }
-
-    public Sucursal getSucursal() {
-        return sucursal;
-    }
-
-    public void setSucursal(Sucursal sucursal) {
-        this.sucursal = sucursal;
-    }
-
-    public Boolean getArmado() {
-        return armado;
-    }
-
-    public void setArmado(Boolean armado) {
-        this.armado = armado;
-    }    
-    
 }

@@ -1,5 +1,6 @@
 package pfa;
 
+import io.leego.banana.BananaUtils;
 import java.io.*;
 import pfa.modelo.Sistema;
 import static pfa.modelo.EntradaSalida.*;
@@ -12,13 +13,14 @@ import static pfa.controlador.ContratoDAO.contratosRouter;
 import static pfa.controlador.EntidadDAO.entidadesRouter;
 import static pfa.controlador.AsaltoDAO.asaltosRouter;
 import static pfa.controlador.DetenidoDAO.detenidosRouter;
+import pfa.util.HibernateUtil;
 
 import static spark.Spark.get;
 import static spark.Spark.path;
 import static spark.Spark.port;
 
 public class Main {    
-    public static void main (String[] args) {
+    public static void main (String[] args) {        
         int p = 2000;
         port(p);
         path("u", usuariosRouter);
@@ -29,9 +31,10 @@ public class Main {
         path("c", contratosRouter);   
         path("a", asaltosRouter);
         path("d", detenidosRouter);
+        System.out.println((BananaUtils.bananaify("Policia\nFederal\nArgentina")));
         System.out.println("Corriendo back en puerto: " + p);
-    }
-    
+        HibernateUtil.getSessionFactory();
+    }    
     /*
     public static void main (String[] args) {
         Sistema s = new Sistema();

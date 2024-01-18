@@ -43,13 +43,17 @@ public class Sistema implements Serializable {
         entidades.listarEntidades();
     }
 
+    
+    /*
     public void agregarDetenido () {
         detenidos.agregarDetenido();
     }
     
+    
     public void listarDetenidos () {
         detenidos.listarDetenidos();
     }
+    */
     
     public void agregarDelito () {
         int i, j, e, s;
@@ -72,7 +76,7 @@ public class Sistema implements Serializable {
         Integer n = leerEntero("Ingrese el número de la banda: ");        
         String s = leerCadena("Ingrese el nombre de la banda: ");
         Integer c = leerEntero("Ingrese la cantidad de miembros de la banda: ");        
-        Bandas.add(new Banda (i.longValue(),n,s,c));
+        // Bandas.add(new Banda (i.longValue(),n,s,c));
     }   
     
     public void agregarVigi() {

@@ -37,8 +37,8 @@ public class Administrador extends Usuario {
                 case 5 -> s.agregarAdmin();
                 case 6 -> s.listarUsuariosConClave();
                 case 7 -> s.listarUsuariosConRol();
-                case 8 -> s.agregarDetenido();
-                case 9 -> s.listarDetenidos();
+                // case 8 -> s.agregarDetenido();
+                // case 9 -> s.listarDetenidos();
                 case 10 -> {
                     Fecha f = leerFecha("Por favor, ingrese la fecha en formato DD/MM/AAAA");
                     f.mostrarFecha();
@@ -164,10 +164,10 @@ public class Administrador extends Usuario {
             op = leerEntero("");
             switch (op) {
                 case 1:
-                        s.agregarDetenido();
+                //        s.agregarDetenido();
                         break;
                 case 2:
-                        s.listarDetenidos();
+                        //s.listarDetenidos();
                         break;
                 
                 default:

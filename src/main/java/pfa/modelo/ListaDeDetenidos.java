@@ -14,6 +14,7 @@ public class ListaDeDetenidos implements Serializable {
         detenidos = new ArrayList <> ();    
     }
     
+    /*
     public void agregarDetenido () {
         //pendiente de validacion
         Integer i = leerEntero("Ingrese el ID del detenido: ");
@@ -24,18 +25,8 @@ public class ListaDeDetenidos implements Serializable {
                                    null)
         );                    
     }
-    
-    public void listarDetenidos () {
-        if (detenidos.isEmpty()) {
-            mostrarMsjLn("No hay detenidos ingresados");
-        }
-        else {
-            for (Detenido d : detenidos) {
-                d.mostrarDetenido();            
-            }        
-        }
-    }
-    
+    */
+       
     public void serializar (String nom) throws IOException {
         ObjectOutputStream o =
         new ObjectOutputStream (new BufferedOutputStream (new FileOutputStream (nom)));
