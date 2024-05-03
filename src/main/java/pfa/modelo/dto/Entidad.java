@@ -48,7 +48,7 @@ public class Entidad implements Serializable {
         } else {
             System.out.println("Sucursales:");
             for (Sucursal s : sucursales) {
-                s.mostrarSucursal();
+//                s.mostrarSucursal();
             }
         }
     }

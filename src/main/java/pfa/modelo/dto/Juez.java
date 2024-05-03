@@ -1,56 +1,36 @@
-/**
- * asignarcondena y tiene condena se mueve a ListaDeDelitos
- */
 package pfa.modelo.dto;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.io.*;
+import lombok.Data;
 import static pfa.modelo.EntradaSalida.*;
 
-import java.io.*;
+@Data
+@Entity
+@Table (name = "jueces")
 
 public class Juez {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column (name = "id")
     private Long id;
+
+    @Column (name = "claveInterna")
     private Integer claveInterna;
+    
+    @Column (name = "nombreCompleto")
     private String nombreCompleto;
+    
+    @Column (name = "aniosServicio")
     private Integer aniosServicio;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getClaveInterna() {
-        return claveInterna;
-    }
-
-    public void setClaveInterna(Integer claveInterna) {
-        this.claveInterna = claveInterna;
-    }
-
-    public String getNombreCompleto() {
-        return nombreCompleto;
-    }
-
-    public void setNombreCompleto(String nombreCompleto) {
-        this.nombreCompleto = nombreCompleto;
-    }
-
-    public Integer getAniosServicio() {
-        return aniosServicio;
-    }
-
-    public void setAniosServicio(Integer aniosServicio) {
-        this.aniosServicio = aniosServicio;
-    }
-    
-    public Juez(int claveInterna, String nombreCompleto, int aniosServicio) {
-        this.claveInterna = claveInterna;
-        this.nombreCompleto = nombreCompleto;
-        this.aniosServicio = aniosServicio;
-    } 
-    
+    /*    
     public Juez () {
         claveInterna = leerEntero("Ingrese la clave interna del juez: ");
         String ape = leerCadena("Ingrese el apellido del juez: ");
@@ -84,5 +64,5 @@ public class Juez {
         o.close();
         return j;
     }
-    
+    */
 }

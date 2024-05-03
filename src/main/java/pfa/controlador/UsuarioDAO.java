@@ -1,9 +1,14 @@
 package pfa.controlador;
 
 import com.google.gson.Gson;
+import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 import pfa.modelo.BaseDeUsuarios;
 import pfa.modelo.Sistema;
+import pfa.modelo.dto.Banda;
 import pfa.modelo.dto.Usuario;
+import pfa.util.HibernateUtil;
 import spark.Route;
 import spark.RouteGroup;
 import static spark.Spark.get;
@@ -11,11 +16,27 @@ import static spark.Spark.path;
 
 public class UsuarioDAO {    
     
-    public static Route getAll = (req, res) -> {
-        res.type("application/json");
+    public static Route getAll = (req, res) -> {        
         Gson gson = new Gson();
-        String u = "ruta de get all";        
-        return gson.toJson(u);    
+        List <Banda> resp = null;
+        try {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();        
+            Query query = session.createQuery("from Usuario");
+            resp = query.getResultList();
+            session.close();    
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (resp != null) {
+            res.type("application/json");
+            return gson.toJson(resp);
+        }    
+        else {
+            res.status(404);
+            return "No hay usuarios o no se puede acceder a la tabla";
+        }
     };
     
     public static Route crear = (req, res) -> {

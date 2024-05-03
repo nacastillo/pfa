@@ -32,10 +32,10 @@ public class ListaDeJueces implements Serializable {
         int clave = leerEntero("Ingrese el codigo del juez a buscar");
         Juez j = null;
         for (Juez k : jueces) {
-            if(k.esEsteJuez(clave)) {
+             // if(k.esEsteJuez(clave)) {
                 j = k;
                 break;
-            }
+            // }
         }
         return j;
     } 
@@ -47,7 +47,7 @@ public class ListaDeJueces implements Serializable {
         else {
             for (Juez j : jueces) {
                 mostrarMsjLn("Lista de jueces:");
-                j.mostrarJuez();            
+                // j.mostrarJuez();            
             }
         }        
     }

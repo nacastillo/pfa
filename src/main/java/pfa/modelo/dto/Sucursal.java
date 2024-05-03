@@ -1,56 +1,36 @@
 package pfa.modelo.dto;
 
 import static pfa.modelo.EntradaSalida.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.io.*;
+import lombok.Data;
 
-public class Sucursal implements Serializable {
+@Data
+@Entity
+@Table (name = "sucursales")
+
+public class Sucursal {
+    //public class Sucursal implements Serializable {
+    @Id
+    @GeneratedValue (strategy = GenerationType.AUTO)
+    @Column (name = "id")
     private Long id;
+
+    @Column (name = "codigo")
     private Integer codigo;
-    private Integer cantidadEmpleados;
-    private String nombre;
-
-    public Sucursal(Long id, Integer codigo, Integer cantidadEmpleados, String nombre) {
-        this.id = id;
-        this.codigo = codigo;
-        this.cantidadEmpleados = cantidadEmpleados;
-        this.nombre = nombre;
-    }    
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
-    }
-
-    public Integer getCantidadEmpleados() {
-        return cantidadEmpleados;
-    }
-
-    public void setCantidadEmpleados(Integer cantidadEmpleados) {
-        this.cantidadEmpleados = cantidadEmpleados;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-
     
+    @Column (name = "cantidadEmpleados")
+    private Integer cantidadEmpleados;
+    
+    @Column (name = "nombre")
+    private String nombre;        
+
+    /*
     
     public void sumarEmpl() {
         cantidadEmpleados++;
@@ -73,5 +53,7 @@ public class Sucursal implements Serializable {
         Sucursal s = (Sucursal) o.readObject();
         o.close();
         return s;
-    }     
+    }
+    
+    */
 }

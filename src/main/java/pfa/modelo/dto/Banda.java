@@ -11,8 +11,10 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "bandas")
-public class Banda implements Serializable {
+@Table (name = "bandas")
+
+public class Banda {
+// public class Banda implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,10 +28,9 @@ public class Banda implements Serializable {
     private String nombre;
     
     @Column (name = "cantidadMiembros")
-    private Integer cantidadMiembros;
-
+    private Integer cantidadMiembros;    
     
-    
+    /*
     public void serializar(String nom) throws IOException {
         ObjectOutputStream o
                 = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(nom)));
@@ -44,4 +45,6 @@ public class Banda implements Serializable {
         o.close();
         return b;
     }
+
+    */
 }

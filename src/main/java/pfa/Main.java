@@ -1,10 +1,8 @@
 package pfa;
 
 import io.leego.banana.BananaUtils;
-import java.io.*;
-import pfa.modelo.Sistema;
-import static pfa.modelo.EntradaSalida.*;
-
+import static spark.Spark.path;
+import static spark.Spark.port;
 import static pfa.controlador.UsuarioDAO.usuariosRouter;
 import static pfa.controlador.SucursalDAO.sucursalesRouter;
 import static pfa.controlador.JuezDAO.juecesRouter;
@@ -14,10 +12,6 @@ import static pfa.controlador.EntidadDAO.entidadesRouter;
 import static pfa.controlador.AsaltoDAO.asaltosRouter;
 import static pfa.controlador.DetenidoDAO.detenidosRouter;
 import pfa.util.HibernateUtil;
-
-import static spark.Spark.get;
-import static spark.Spark.path;
-import static spark.Spark.port;
 
 public class Main {    
     public static void main (String[] args) {        
@@ -33,33 +27,6 @@ public class Main {
         path("d", detenidosRouter);
         System.out.println((BananaUtils.bananaify("Policia\nFederal\nArgentina")));
         System.out.println("Corriendo back en puerto: " + p);
-        HibernateUtil.getSessionFactory();
+        // HibernateUtil.getSessionFactory();
     }    
-    /*
-    public static void main (String[] args) {
-        Sistema s = new Sistema();
-        int op = 1;        
-        try {
-            s = s.deSerializar("sistema.bin");
-        }
-        catch (FileNotFoundException ex) {
-            mostrarMsjLn("Primer ingreso al sistema.\nGenerando default admin...");
-            s.defaultAdmin();
-        }
-        catch (IOException | ClassNotFoundException ex) {
-            mostrarMsjLn("Problema al abrir el sistema.\nReiniciando sistema y generando default admin...");
-            s.defaultAdmin();
-        }
-        do {        
-            port(2000);                        
-            path("usuarios",usuariosRouter);            
-            get("/*", (req, res) -> {
-                return "<h>error fatal</h>";
-            });
-            op = s.menuLogin();
-        }
-        while (op == 0);
-        s.grabarSistema();        
-    } 
-    */
 }
