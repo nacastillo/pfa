@@ -10,7 +10,7 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 import static spark.Spark.delete;
-import pfa.modelo.dto.Sucursal;
+import pfa.modelo.Sucursal;
 import pfa.util.HibernateUtil;
 
 public class SucursalDAO {

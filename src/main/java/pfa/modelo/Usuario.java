@@ -1,27 +1,20 @@
-package pfa.modelo.dto;
+package pfa.modelo;
 
-import pfa.modelo.Sistema;
-
+import lombok.Data;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
-import jakarta.persistence.Table;
-import java.io.*;
-
-import lombok.Data;
-import static pfa.modelo.EntradaSalida.*;
 
 @Data
 @Entity
 @Table (name = "usuarios")
 @Inheritance (strategy = InheritanceType.SINGLE_TABLE)
 
-
-// public abstract class Usuario implements Serializable {
 public abstract class Usuario {
 
     @Id
@@ -36,29 +29,8 @@ public abstract class Usuario {
     private String pwd;
 
     @Column (name = "rol")
-    private String rol;
-
-    public void mostrarUsuarioConClave () {
-        mostrarMsjLn("Usuario: " + usr + ", clave: " + pwd);
-    }
+    private String rol;    
     
-    /*
-    public void serializar (String nom) throws IOException {
-        ObjectOutputStream o =
-        new ObjectOutputStream (new BufferedOutputStream (new FileOutputStream (nom)));
-        o.writeObject(this);
-        o.close();    
-    }
-    
-    public Usuario deSerializar (String nom) throws IOException, ClassNotFoundException {
-        ObjectInputStream o =
-        new ObjectInputStream (new BufferedInputStream (new FileInputStream (nom)));
-        Usuario u = (Usuario) o.readObject();
-        o.close();
-        return u;    
-    }
-
-    */
     public boolean esUsr (String usr) {
         return this.usr.equals(usr);
     }
@@ -69,15 +41,7 @@ public abstract class Usuario {
     
     public String esDeRol() {
         return this.getClass().getSimpleName();
-    }
-    
-    public void mostrarUsuarioConRol () {
-        mostrarMsjLn("Usuario: " + usr + ", rol: "  + esDeRol());
-    }
-    
-    public void mostrarUsuario () {
-        mostrarMsjLn(usr);    
-    }
+    }   
     
     public boolean esVigi () {
         return this.getClass().getSimpleName().equals("Vigilante");
@@ -90,8 +54,5 @@ public abstract class Usuario {
     public boolean esAdmin () {
         return this.getClass().getSimpleName().equals("Administrador");
     }     
-        
-    public abstract int menuPrincipal(Sistema s);
-
 
 }

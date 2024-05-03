@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import spark.Route;
 import spark.RouteGroup;
 import static spark.Spark.get;
-import pfa.modelo.dto.Entidad;
+import pfa.modelo.Entidad;
 
 public class DetenidoDAO {
     

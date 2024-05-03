@@ -11,8 +11,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import pfa.modelo.dto.Banda;
-import pfa.modelo.dto.Entidad;
+import pfa.modelo.Banda;
+import pfa.modelo.Entidad;
 
 public class AsaltoDAO {
     

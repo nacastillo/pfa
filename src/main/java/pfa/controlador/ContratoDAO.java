@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import spark.Route;
 import spark.RouteGroup;
 import static spark.Spark.get;
-import pfa.modelo.dto.Contrato;
+import pfa.modelo.Contrato;
 
 public class ContratoDAO {
 
