@@ -6,33 +6,39 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
 @Entity
 @Table (name = "contratos")
 
-public class Contrato {
+public class Contrato implements Serializable {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column (name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (nullable = false, unique = true, updatable = false, insertable = false)
     private Long id;
     
-    @Column (name = "codigo")
+    @Column (nullable = false, unique = true)
     private Integer codigo;
     
-    @Column (name = "fecha" )
-    private LocalDate fecha;
+    @Column (nullable = false)
+    //private LocalDate fecha;
+    private String fecha;
     
-    @Column (name = "vigilante")
+    @ManyToOne
+    @JoinColumn (nullable = false) // borrado name con _id
     private Usuario vigilante;
     
-    @Column (name = "sucursal")
+    @ManyToOne
+    @JoinColumn (nullable = false) // borrado name con _id
     private Sucursal sucursal;
     
-    @Column (name = "armado")
+    @Column (nullable = false)
     private Boolean armado;
        
 }

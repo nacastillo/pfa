@@ -2,57 +2,45 @@ package pfa.modelo;
 
 import lombok.Data;
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToMany;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
 @Table (name = "usuarios")
 @Inheritance (strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn (name = "rol")
 
-public abstract class Usuario {
+public class Usuario implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column (name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (nullable = false, unique = true, updatable = false, insertable = false)
     private Long id;
 
-    @Column (name = "usr")
+    @Column (nullable = false, unique = true, length = 64)
     private String usr;
 
-    @Column (name = "pwd")
+    @Column (nullable = false, length = 64)
     private String pwd;
 
-    @Column (name = "rol")
-    private String rol;    
+    @Column (insertable = false, updatable = false)
+    private String rol;
     
-    public boolean esUsr (String usr) {
-        return this.usr.equals(usr);
-    }
+    public Usuario (String usr, String pwd) {
+        this.usr = usr;
+        this.pwd = pwd;        
+    }    
     
-    public boolean esPwd (String pwd) {
-        return this.pwd.equals(pwd);
-    }   
-    
-    public String esDeRol() {
-        return this.getClass().getSimpleName();
-    }   
-    
-    public boolean esVigi () {
-        return this.getClass().getSimpleName().equals("Vigilante");
-    }
-    
-    public boolean esInves () {
-        return this.getClass().getSimpleName().equals("Investigador");
-    }
-    
-    public boolean esAdmin () {
-        return this.getClass().getSimpleName().equals("Administrador");
-    }     
-
 }

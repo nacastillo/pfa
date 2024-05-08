@@ -15,14 +15,18 @@
         <property name="hibernate.query.factory_class">org.hibernate.hql.internal.QueryTranslatorFactoryInitiator</property>
 
         <property name="hibernate.hbm2ddl.auto">update</property>        
-        <mapping class="pfa.modelo.dto.Banda" />        
-        <mapping class="pfa.modelo.dto.Detenido"></mapping>
-        <mapping class="pfa.modelo.dto.Asalto"></mapping>
-        <mapping class="pfa.modelo.dto.Contrato"></mapping>
-        <mapping class="pfa.modelo.dto.Entidad"></mapping>
-        <mapping class="pfa.modelo.dto.Juez"></mapping>
-        <mapping class="pfa.modelo.dto.Sucursal"></mapping>
-        <mapping class="pfa.modelo.dto.Usuario"></mapping>         
+        
+        <mapping class="pfa.modelo.Banda"></mapping>         
+        <mapping class="pfa.modelo.Detenido"></mapping>
+        <mapping class="pfa.modelo.Asalto"></mapping>
+        <mapping class="pfa.modelo.Contrato"></mapping>
+        <mapping class="pfa.modelo.Entidad"></mapping>
+        <mapping class="pfa.modelo.Juez"></mapping>
+        <mapping class="pfa.modelo.Sucursal"></mapping>
+        <mapping class="pfa.modelo.Usuario"></mapping>   
+	<mapping class="pfa.modelo.Vigilante"/>
+        <mapping class="pfa.modelo.Investigador"/>
+        <mapping class="pfa.modelo.Administrador"/>      
         
     </session-factory>
 </hibernate-configuration>

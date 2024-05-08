@@ -47,7 +47,7 @@ public class SucursalDAO {
         }
         catch (Exception e) {
             e.printStackTrace();
-            return "";
+            return "error";
         }
     };
     

@@ -39,7 +39,7 @@ public class BandaDAO {
             return g.toJson(b);
         } catch (Exception e) {
             e.printStackTrace();
-            return "";
+            return "error";
         }
     };
 
@@ -53,8 +53,11 @@ public class BandaDAO {
             b = s.get(Banda.class, id);
             s.getTransaction().commit();
             s.close();
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
+            res.status(500);
             e.printStackTrace();
+            return "error";
         }
         if (b != null) {
             res.type("application/json");
@@ -79,9 +82,11 @@ public class BandaDAO {
             if (bU.getNombre() != null) {
                 b.setNombre(bU.getNombre());
             }
+            /*
             if (bU.getCantidadMiembros() != null) {
                 b.setCantidadMiembros(bU.getCantidadMiembros());
             }
+            */
             s.update(b);
             s.getTransaction().commit();
             s.close();
@@ -94,7 +99,6 @@ public class BandaDAO {
     };
 
     public static Route borrar = (req, res) -> {
-        res.type("application/json");
         Gson g = new Gson();
         long id = Long.parseLong(req.params(":id"));
         Session s = HibernateUtil.getSessionFactory().openSession();
@@ -104,6 +108,7 @@ public class BandaDAO {
             s.delete(b);
             s.getTransaction().commit();
             s.close();
+            res.type("application/json");
             return g.toJson(b);
         } else {
             res.status(404);

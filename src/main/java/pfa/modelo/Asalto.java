@@ -6,36 +6,52 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
 @Table (name = "asaltos")
 
-public class Asalto {
+public class Asalto implements Serializable {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column (name = "id")    
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (nullable = false, unique = true, updatable = false, insertable = false)    
     private Long id;
     
-    @Column (name = "codigo")
+    @Column (nullable = false, unique = true)
     private Integer codigo;
     
-    @Column (name = "fechaAsalto")
-    private LocalDate fechaAsalto;
+    @Column (nullable = false)
+    //private LocalDate fechaAsalto;
+    private String fechaAsalto;
     
-    @Column (name = "sucursalAsaltada")
-    private Sucursal sucursalAsaltada;
+    @ManyToOne 
+    @JoinColumn (nullable = false)
+    private Sucursal sucursalAsaltada;   
     
-    @Column (name = "juezAsignado")
+    @ManyToOne 
+    @JoinColumn (nullable = false)
     private Juez juezAsignado;
     
-    @Column (name = "detenido")
-    private Detenido detenido;
+    @ManyToMany
+    @JoinTable(
+        name = "asalto_detenido",
+        joinColumns = @JoinColumn(name = "asalto_id"),
+        inverseJoinColumns = @JoinColumn(name = "detenido_id")
+    )
+    private Set<Detenido> detenidos = new HashSet<>();
     
-    @Column (name = "fechaCondena")
-    private LocalDate fechaCondena;   
+    @Column (nullable = false)
+    //private LocalDate fechaCondena;   
+    private String fechaCondena;
      
 }

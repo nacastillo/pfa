@@ -1,37 +1,43 @@
 package pfa.modelo;
 
-import java.io.*;
+import java.io.Serializable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Data;
 
 @Data
 @Entity
 @Table (name = "entidades")
 
-public class Entidad { 
+public class Entidad implements Serializable { 
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column (name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (nullable = false, unique = true, updatable = false, insertable = false)
     private Long id;
     
-    @Column (name = "codigo")
+    @Column (nullable = false, unique = true)
     private Integer codigo;
         
-    @Column (name = "domicilio") 
+    @Column (nullable = false, length = 64) 
     private String domicilio;
     
-    @Column (name = "nombre")
+    @Column (nullable = false, length = 64)
     private String nombre;
     
-    @Column (name = "sucursales") // VER BIEN ESTO
-    private Collection<Sucursal> sucursales;
+    @OneToMany (mappedBy = "entidad")    
+    private List<Sucursal> sucursales;
+    
+    public Entidad () {
+        sucursales = new ArrayList <> () ;
+    }
     
     // ojo constructor, yo quiero composicion y no agregacion
 }

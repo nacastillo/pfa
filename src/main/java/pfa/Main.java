@@ -27,6 +27,6 @@ public class Main {
         path("d", detenidosRouter);
         System.out.println((BananaUtils.bananaify("Policia\nFederal\nArgentina")));
         System.out.println("Corriendo back en puerto: " + p);
-        // HibernateUtil.getSessionFactory();
+        HibernateUtil.getSessionFactory();
     }    
 }

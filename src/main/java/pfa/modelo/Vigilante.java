@@ -1,72 +1,34 @@
-package pfa.modelo.dto;
+package pfa.modelo;
 
-import pfa.modelo.Sistema;
-import pfa.modelo.dto.Usuario;
-import static pfa.modelo.Constantes.cadenaMenuVigis;
-import static pfa.modelo.EntradaSalida.*;
+import jakarta.persistence.Column;
+import lombok.Data;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Vigilante extends Usuario {
+@Data
+@Entity (name = "Vigilante")
+@DiscriminatorValue (value = "Vigilante")
+
+public class Vigilante extends Usuario {    
+    
+    @Column (unique = true)
     private Integer codigo;
-    private Integer edad;		
     
-    public Vigilante (String user, String pass, int codVig, int edad) {
-        super.setUsr(user);
-        super.setPwd(pass);
-        this.codigo = codVig;
+    @Column 
+    private Integer edad;    
+    
+    @OneToMany (mappedBy = "vigilante", fetch = FetchType.EAGER)
+    private List <Contrato> contratos;
+    
+    public Vigilante (String usr, String pwd, Integer codigo, Integer edad) {
+        super(usr, pwd);
+        this.codigo = codigo;
         this.edad = edad;
+        this.contratos = new ArrayList <> ();
     }
     
-    public int getCodVig () {
-        return codigo;
-    }
-    
-    public boolean esCodVig (int cod) {
-        return codigo == cod;
-    }
-    
-    @Override
-    /**
-     * Implementacion propia de toString, imprimiendo nombre de usuario, codigo y edad.
-     * @return String
-     */
-    public String toString () {
-        return "Usuario: " + getUsr() +
-                ", codigo: " + codigo +
-                ", edad: " + edad +
-                ".";
-    }
-    
-    @Override
-    public int menuPrincipal (Sistema s) {
-        int i;
-        do {
-            mostrarMsjLn(cadenaMenuVigis);
-            /*
-            mostrarMsjLn("Ingrese una opcion\n"
-                + "<1>\tConsultar sucursales asignadas\n"
-                + "<2>\tConsultar fechas asignadas\n"
-                + "<3>\tSalir del sistema\n"
-                + "<4>\tes vigilante\n"
-                + "<5>\tes inv\n"
-                + "<6>\tes admin\n"
-                + "\n"
-                + "<0>\tCerrar sesión\n"
-            );
-            */
-            try {
-                i = leerEntero();
-            }
-            catch (Exception ex) {
-                System.out.println("Por favor ingrese una opcion correcta");
-                i = -1;
-            }
-            switch (i) {
-                case 1, 2, 3 -> System.out.println("A implementar");
-                case 4 -> System.out.println(esVigi());
-                case 5 -> System.out.println(esInves());
-                case 6 -> System.out.println(esAdmin());                
-            }
-        } while (i != 0);        
-    return i;
-    }    
 }

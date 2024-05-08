@@ -1,9 +1,17 @@
 package pfa.modelo;
 
-public class Administrador extends Usuario {
+import lombok.Data;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+
+@Data
+@Entity (name = "Administrador")
+@DiscriminatorValue ("Administrador")
+
+public class Administrador extends Usuario {    
     
-    public Administrador (String user, String pass) {
-        setUsr(user);
-        setPwd(pass);    
-    }    
+    public Administrador (String usr, String pwd) {
+        super(usr, pwd);        
+    }
+    
 }
