@@ -17,102 +17,131 @@ public class BandaDAO {
 
     public static Route getAll = (req, res) -> {
         Gson g = new Gson();
-        Session s = HibernateUtil.getSessionFactory().openSession();
-        s.beginTransaction();
-        Query q = s.createQuery("from Banda");
-        List<Banda> resp = q.getResultList();
-        s.close();
-        res.type("application/json");
-        return g.toJson(resp);
+        List <Banda> x = null;
+        try {
+            Session s = HibernateUtil.getSessionFactory().openSession();
+            s.beginTransaction();
+            Query q = s.createQuery("from Banda", Banda.class);
+            x = q.getResultList();
+            s.close();
+            if (!x.isEmpty()) {
+                res.type("application/json");
+                return g.toJson(x);
+            }
+            else {
+                res.status(404);
+                return "No hay bandas registradas.";
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "Excepción.";
+        }
     };
 
     public static Route crear = (req, res) -> {
         Gson g = new Gson();
-        Banda b = g.fromJson(req.body(), Banda.class);
+        Banda x = g.fromJson(req.body(), Banda.class);
         try {
             Session s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
-            s.save(b);
+            s.persist(x);
             s.getTransaction().commit();
             s.close();
             res.type("application/json");
-            return g.toJson(b);
-        } catch (Exception e) {
+            return g.toJson(x);
+        } 
+        catch (Exception e) {
+            res.status(500);
             e.printStackTrace();
-            return "error";
+            return "Excepción.";
         }
     };
 
     public static Route leer = (req, res) -> {
         Gson g = new Gson();
-        Banda b = null;
+        Banda x = null;
         try {
             long id = Long.parseLong(req.params(":id"));
             Session s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
-            b = s.get(Banda.class, id);
+            x = s.get(Banda.class, id);
             s.getTransaction().commit();
             s.close();
-        } 
+            if (x != null) {
+                res.type("application/json");
+                return g.toJson(x);
+            } 
+            else {
+                res.status(404);
+                return "No se encontró banda.";
+            }
+        }         
         catch (Exception e) {
             res.status(500);
             e.printStackTrace();
-            return "error";
-        }
-        if (b != null) {
-            res.type("application/json");
-            return g.toJson(b);
-        } else {
-            res.status(404);
-            return "No se encontró banda.";
+            return "Excepción.";
         }
     };
 
     public static Route actualizar = (req, res) -> {
         Gson g = new Gson();
         long id = Long.parseLong(req.params(":id"));
-        Banda bU = g.fromJson(req.body(), Banda.class);
-        Session s = HibernateUtil.getSessionFactory().openSession();
-        s.beginTransaction();
-        Banda b = s.get(Banda.class, id);
-        if (b != null) {
-            if (bU.getNumero() != null) {
-                b.setNumero(bU.getNumero());
+        Banda x = g.fromJson(req.body(), Banda.class);
+        Banda y = null;
+        try {
+            Session s = HibernateUtil.getSessionFactory().openSession();
+            s.beginTransaction();
+            y = s.get(Banda.class, id);
+            if (y != null) { /* A actualizar: numero y nombre */
+                if (x.getNumero() != null) {
+                    y.setNumero(x.getNumero());
+                }
+                if (x.getNombre() != null) {
+                    y.setNombre(x.getNombre());
+                }            
+                s.merge(y);
+                s.getTransaction().commit();
+                s.close();
+                res.type("application/json");
+                return g.toJson(y);    
+            }            
+            else {
+                res.status(404);
+                return "No se encontró banda.";
             }
-            if (bU.getNombre() != null) {
-                b.setNombre(bU.getNombre());
-            }
-            /*
-            if (bU.getCantidadMiembros() != null) {
-                b.setCantidadMiembros(bU.getCantidadMiembros());
-            }
-            */
-            s.update(b);
-            s.getTransaction().commit();
-            s.close();
-            res.type("application/json");
-            return g.toJson(b);
-        } else {
-            res.status(404);
-            return "No se encontró banda.";
+        }
+        catch (Exception e) {
+            res.status(500);
+            e.printStackTrace();
+            return "Excepción.";
         }
     };
 
     public static Route borrar = (req, res) -> {
         Gson g = new Gson();
         long id = Long.parseLong(req.params(":id"));
-        Session s = HibernateUtil.getSessionFactory().openSession();
-        s.beginTransaction();
-        Banda b = s.get(Banda.class, id);
-        if (b != null) {
-            s.delete(b);
-            s.getTransaction().commit();
-            s.close();
-            res.type("application/json");
-            return g.toJson(b);
-        } else {
-            res.status(404);
-            return "No se encontró banda.";
+        Banda x = null;
+        try {
+            Session s = HibernateUtil.getSessionFactory().openSession();
+            s.beginTransaction();
+            x = s.get(Banda.class, id);
+            if (x != null) {            
+                s.remove(x);
+                s.getTransaction().commit();
+                s.close();
+                res.type("application/json");
+                return "Elemento borrado: " + g.toJson(x);
+            } 
+            else {
+                res.status(404);
+                return "No se encontró banda.";
+            }
+        }
+        catch (Exception e) {
+            res.status(500);
+            e.printStackTrace();
+            return "Excepción.";
         }
     };
 

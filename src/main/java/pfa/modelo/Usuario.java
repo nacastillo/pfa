@@ -38,6 +38,9 @@ public class Usuario implements Serializable {
     @Column (insertable = false, updatable = false)
     private String rol;
     
+    public Usuario () {
+    }
+    
     public Usuario (String usr, String pwd) {
         this.usr = usr;
         this.pwd = pwd;        

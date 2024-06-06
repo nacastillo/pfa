@@ -31,7 +31,7 @@ public class Entidad implements Serializable {
     
     @Column (nullable = false, length = 64)
     private String nombre;
-    
+     
     @OneToMany (mappedBy = "entidad")    
     private List<Sucursal> sucursales;
     

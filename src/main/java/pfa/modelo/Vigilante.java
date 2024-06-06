@@ -24,11 +24,13 @@ public class Vigilante extends Usuario {
     @OneToMany (mappedBy = "vigilante", fetch = FetchType.EAGER)
     private List <Contrato> contratos;
     
+    public Vigilante () {
+    }
+    
     public Vigilante (String usr, String pwd, Integer codigo, Integer edad) {
         super(usr, pwd);
         this.codigo = codigo;
         this.edad = edad;
         this.contratos = new ArrayList <> ();
-    }
-    
+    }    
 }

@@ -29,7 +29,7 @@ public class Detenido implements Serializable {
     private Integer codigo;
     
     @Column (nullable = false)
-    private String nombreCompleto;
+    private String nombre;
     
     @ManyToOne
     @JoinColumn (name = "banda_id")
@@ -37,5 +37,9 @@ public class Detenido implements Serializable {
     
     @ManyToMany(mappedBy = "detenidos")
     private Set<Asalto> asaltos = new HashSet<>();
+
+    @Column (nullable = false)
+    //private LocalDate fechaCondena;   
+    private String fechaCondena;
       
 }

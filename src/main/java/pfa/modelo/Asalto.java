@@ -12,7 +12,6 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,16 +30,15 @@ public class Asalto implements Serializable {
     private Integer codigo;
     
     @Column (nullable = false)
-    //private LocalDate fechaAsalto;
-    private String fechaAsalto;
+    private String fecha;
     
     @ManyToOne 
     @JoinColumn (nullable = false)
-    private Sucursal sucursalAsaltada;   
+    private Sucursal sucursal;   
     
     @ManyToOne 
     @JoinColumn (nullable = false)
-    private Juez juezAsignado;
+    private Juez juez;
     
     @ManyToMany
     @JoinTable(
@@ -48,10 +46,6 @@ public class Asalto implements Serializable {
         joinColumns = @JoinColumn(name = "asalto_id"),
         inverseJoinColumns = @JoinColumn(name = "detenido_id")
     )
-    private Set<Detenido> detenidos = new HashSet<>();
-    
-    @Column (nullable = false)
-    //private LocalDate fechaCondena;   
-    private String fechaCondena;
+    private Set<Detenido> detenidos = new HashSet<>();    
      
 }

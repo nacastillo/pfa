@@ -23,15 +23,15 @@ public class Juez implements Serializable {
     private Long id;
 
     @Column (nullable = false, unique = true)
-    private Integer claveInterna;
+    private Integer clave;
     
     @Column (nullable = false)
-    private String nombreCompleto;
+    private String nombre;
     
     @Column (nullable = false)
     private Integer aniosServicio;
     
-    @OneToMany(mappedBy = "juezAsignado")    
+    @OneToMany(mappedBy = "juez")    
     private List<Asalto> asaltos;
     
 }

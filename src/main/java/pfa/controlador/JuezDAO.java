@@ -17,13 +17,26 @@ public class JuezDAO {
 
     public static Route getAll = (req, res) -> {
         Gson g = new Gson();
-        Session s = HibernateUtil.getSessionFactory().openSession();
-        s.beginTransaction();
-        Query q = s.createQuery("from Juez");
-        List<Juez> resp = q.getResultList();
-        s.close();
-        res.type("application/json");
-        return g.toJson(resp);
+        List <Juez> resp = null;
+        try {
+            Session s = HibernateUtil.getSessionFactory().openSession();
+            s.beginTransaction();
+            Query q = s.createQuery("from Juez", Juez.class);
+            resp = q.getResultList();
+            s.close();
+            if (!resp.isEmpty()) {
+                res.type("application/json");
+                return g.toJson(resp);
+            }
+            else {
+                res.status(404);
+                return "No hay jueces registrados.";
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "Excepción.";
+        }    
     };
 
     public static Route crear = (req, res) -> {
@@ -32,14 +45,15 @@ public class JuezDAO {
         try {
             Session s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
-            s.save(j);
+            s.persist(j);
             s.getTransaction().commit();
             s.close();
             res.type("application/json");
             return g.toJson(j);
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             e.printStackTrace();
-            return "";
+            return "Excepción.";
         }
     };
 
@@ -53,62 +67,82 @@ public class JuezDAO {
             j = s.get(Juez.class, id);
             s.getTransaction().commit();
             s.close();
-        } catch (Exception e) {
+            if (j != null) {
+                res.type("application/json");
+                return g.toJson(j);
+            } 
+            else {
+                res.status(404);
+                return "Banda no encontrada";
+            }
+        }         
+        catch (Exception e) {
+            res.status(500);
             e.printStackTrace();
-            return "";
-        }
-        if (j != null) {
-            res.type("application/json");
-            return g.toJson(j);
-        } else {
-            res.status(404);
-            return "Banda no encontrada";
-        }
+            return "Excepción.";
+        }        
     };
 
     public static Route actualizar = (req, res) -> {
         Gson g = new Gson();
         long id = Long.parseLong(req.params(":id"));
         Juez ju = g.fromJson(req.body(), Juez.class);
-        Session s = HibernateUtil.getSessionFactory().openSession();
-        s.beginTransaction();
-        Juez j = s.get(Juez.class, id);
-        if (j != null) {
-            if (ju.getClaveInterna() != null) {
-                j.setClaveInterna(ju.getClaveInterna());
+        Juez j = null;
+        try {        
+            Session s = HibernateUtil.getSessionFactory().openSession();
+            s.beginTransaction();
+            j = s.get(Juez.class, id);
+            if (j != null) { /* Campos a actualizar: clave, nombre, anios */
+                if (ju.getClave() != null) {
+                    j.setClave(ju.getClave());
+                }
+                if (ju.getNombre() != null) {
+                    j.setNombre(ju.getNombre());
+                }
+                if (ju.getAniosServicio() != null) {
+                    j.setAniosServicio(ju.getAniosServicio());
+                }
+                s.merge(j);
+                s.getTransaction().commit();
+                s.close();
+                res.type("application/json");
+                return g.toJson(j);
+            }    
+            else {
+                res.status(404);
+                return "No se encontró juez.";
             }
-            if (ju.getNombreCompleto() != null) {
-                j.setNombreCompleto(ju.getNombreCompleto());
-            }
-            if (ju.getAniosServicio() != null) {
-                j.setAniosServicio(ju.getAniosServicio());
-            }
-            s.update(j);
-            s.getTransaction().commit();
-            s.close();
-            res.type("application/json");
-            return g.toJson(j);
-        } else {
-            res.status(404);
-            return "No se encontró juez.";
+        }
+        catch (Exception e) {
+            res.status(500);
+            e.printStackTrace();
+            return "Excepción.";
         }
     };
 
-    public static Route borrar = (req, res) -> {
-        res.type("application/json");
+    public static Route borrar = (req, res) -> {        
         Gson g = new Gson();
         long id = Long.parseLong(req.params(":id"));
-        Session s = HibernateUtil.getSessionFactory().openSession();
-        s.beginTransaction();
-        Juez j = s.get(Juez.class, id);
-        if (j != null) {
-            s.delete(j);
-            s.getTransaction().commit();
-            s.close();
-            return g.toJson(j);
-        } else {
-            res.status(404);
-            return "No se encontró juez.";
+        try {
+            Session s = HibernateUtil.getSessionFactory().openSession();
+            s.beginTransaction();
+            Juez j = s.get(Juez.class, id);
+            if (j != null) {
+                s.remove(j);
+                s.getTransaction().commit();
+                s.close();
+                res.type("application/json");
+                return g.toJson(j);
+            } 
+            else {
+                res.status(404);
+                return "No se encontró juez.";
+            }
+        }
+        catch (Exception e) {
+            res.status(500);
+            e.printStackTrace();
+            return "Excepción.";
         }
     };
 

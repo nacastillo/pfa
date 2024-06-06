@@ -43,7 +43,7 @@ public class Sucursal implements Serializable {
     @OneToMany (mappedBy = "sucursal", fetch = FetchType.EAGER)
     private List <Contrato> contratos;
     
-    @OneToMany (mappedBy = "sucursalAsaltada", fetch = FetchType.EAGER)
+    @OneToMany (mappedBy = "sucursal", fetch = FetchType.EAGER)
     private List <Asalto> asaltos;
     
 }
