@@ -1,18 +1,17 @@
 package pfa.modelo;
 
 import lombok.Data;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Entity
@@ -29,17 +28,13 @@ public class Detenido implements Serializable {
     private Integer codigo;
     
     @Column (nullable = false)
-    private String nombre;
+    private String nombre;          
     
-    @ManyToOne
-    @JoinColumn (name = "banda_id")
-    private Banda banda;        
+    @Column
+    private Long banda;
     
-    @ManyToMany(mappedBy = "detenidos")
-    private Set<Asalto> asaltos = new HashSet<>();
-
-    @Column (nullable = false)
-    //private LocalDate fechaCondena;   
-    private String fechaCondena;
-      
+    @OneToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn (name = "detenido")
+    private List <Asalto> asaltos;
+    
 }

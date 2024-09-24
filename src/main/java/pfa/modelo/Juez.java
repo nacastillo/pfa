@@ -1,11 +1,13 @@
 package pfa.modelo;
 
 import lombok.Data;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
@@ -23,15 +25,16 @@ public class Juez implements Serializable {
     private Long id;
 
     @Column (nullable = false, unique = true)
-    private Integer clave;
+    private String clave;
     
     @Column (nullable = false)
     private String nombre;
     
     @Column (nullable = false)
-    private Integer aniosServicio;
-    
-    @OneToMany(mappedBy = "juez")    
+    private Integer aniosServicio;    
+      
+    @OneToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn (name = "juez")
     private List<Asalto> asaltos;
     
 }

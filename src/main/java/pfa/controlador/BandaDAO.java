@@ -18,15 +18,17 @@ public class BandaDAO {
     public static Route getAll = (req, res) -> {
         Gson g = new Gson();
         List <Banda> x = null;
+        Session s = null;        
         try {
-            Session s = HibernateUtil.getSessionFactory().openSession();
-            s.beginTransaction();
+            s = HibernateUtil.getSessionFactory().openSession();
+            s.beginTransaction();            
             Query q = s.createQuery("from Banda", Banda.class);
-            x = q.getResultList();
-            s.close();
+            x = q.getResultList();            
             if (!x.isEmpty()) {
                 res.type("application/json");
-                return g.toJson(x);
+                res.body(g.toJson(x));
+                s.close();
+                return res.body();
             }
             else {
                 res.status(404);
@@ -34,43 +36,54 @@ public class BandaDAO {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
-            return "Excepción.";
+            res.status(500);
+            return e.toString();
+        }
+        finally {
+            if (s != null)
+                s.close();
         }
     };
 
     public static Route crear = (req, res) -> {
         Gson g = new Gson();
         Banda x = g.fromJson(req.body(), Banda.class);
+        Session s = null;
         try {
-            Session s = HibernateUtil.getSessionFactory().openSession();
+            s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
             s.persist(x);
-            s.getTransaction().commit();
-            s.close();
+            s.getTransaction().commit();            
             res.type("application/json");
-            return g.toJson(x);
+            res.body(g.toJson(x));
+            s.close();
+            return res.body();
         } 
         catch (Exception e) {
             res.status(500);
-            e.printStackTrace();
-            return "Excepción.";
+            return e.toString();
+        }
+        finally {
+            if (s != null)
+                s.close();
         }
     };
 
     public static Route leer = (req, res) -> {
         Gson g = new Gson();
         Banda x = null;
+        Session s = null;
         try {
             long id = Long.parseLong(req.params(":id"));
-            Session s = HibernateUtil.getSessionFactory().openSession();
+            s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
             x = s.get(Banda.class, id);
-            s.getTransaction().commit();
-            s.close();
+            s.getTransaction().commit();            
             if (x != null) {
                 res.type("application/json");
-                return g.toJson(x);
+                res.body(g.toJson(x));
+                s.close();
+                return res.body();
             } 
             else {
                 res.status(404);
@@ -79,32 +92,40 @@ public class BandaDAO {
         }         
         catch (Exception e) {
             res.status(500);
-            e.printStackTrace();
-            return "Excepción.";
+            return e.toString();
+        }
+        finally {
+            if (s != null)
+                s.close();
         }
     };
 
     public static Route actualizar = (req, res) -> {
         Gson g = new Gson();
         long id = Long.parseLong(req.params(":id"));
-        Banda x = g.fromJson(req.body(), Banda.class);
-        Banda y = null;
+        Banda front = g.fromJson(req.body(), Banda.class);
+        Banda db = null;
+        Session s = null;
         try {
-            Session s = HibernateUtil.getSessionFactory().openSession();
+            s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
-            y = s.get(Banda.class, id);
-            if (y != null) { /* A actualizar: numero y nombre */
-                if (x.getNumero() != null) {
-                    y.setNumero(x.getNumero());
+            db = s.get(Banda.class, id);
+            if (db != null) { /* numero, nombre, miembros */
+                if (front.getNumero() == null) {
+                    front.setNumero(db.getNumero());
                 }
-                if (x.getNombre() != null) {
-                    y.setNombre(x.getNombre());
+                if (front.getNombre() == null || front.getNombre().equals("")) {
+                    front.setNombre(db.getNombre());
                 }            
-                s.merge(y);
-                s.getTransaction().commit();
-                s.close();
+                if (front.getMiembros() == null) {
+                    front.setMiembros(db.getMiembros());
+                }
+                s.merge(front);
+                s.getTransaction().commit();                
                 res.type("application/json");
-                return g.toJson(y);    
+                res.body(g.toJson(front));
+                s.close();
+                return res.body();
             }            
             else {
                 res.status(404);
@@ -113,8 +134,11 @@ public class BandaDAO {
         }
         catch (Exception e) {
             res.status(500);
-            e.printStackTrace();
-            return "Excepción.";
+            return e.toString();
+        }
+        finally {
+            if (s != null)
+                s.close();
         }
     };
 
@@ -122,16 +146,18 @@ public class BandaDAO {
         Gson g = new Gson();
         long id = Long.parseLong(req.params(":id"));
         Banda x = null;
+        Session s = null;
         try {
-            Session s = HibernateUtil.getSessionFactory().openSession();
+            s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
             x = s.get(Banda.class, id);
             if (x != null) {            
-                s.remove(x);
-                s.getTransaction().commit();
-                s.close();
                 res.type("application/json");
-                return "Elemento borrado: " + g.toJson(x);
+                res.body(g.toJson(x));
+                s.remove(x);
+                s.getTransaction().commit();                
+                s.close();
+                return res.body();                
             } 
             else {
                 res.status(404);
@@ -140,8 +166,11 @@ public class BandaDAO {
         }
         catch (Exception e) {
             res.status(500);
-            e.printStackTrace();
-            return "Excepción.";
+            return e.toString();
+        }
+        finally {
+            if (s != null)
+                s.close();
         }
     };
 

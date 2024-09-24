@@ -2,9 +2,7 @@ package pfa.controlador;
 
 import com.google.gson.Gson;
 import java.util.List;
-import org.hibernate.PropertyValueException;
 import org.hibernate.Session;
-import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import spark.Route;
 import spark.RouteGroup;
@@ -15,148 +13,188 @@ import static spark.Spark.delete;
 import pfa.modelo.Sucursal;
 import pfa.util.HibernateUtil;
 
-/* TODO: ver cómo editar la entidad en actualizar */
-
 public class SucursalDAO {
 
     public static Route getAll = (req, res) -> {
         Gson g = new Gson();
         List <Sucursal> resp = null;
+        Session s = null;        
         try {
-            Session s = HibernateUtil.getSessionFactory().openSession();
+            s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
             Query q = s.createQuery("from Sucursal", Sucursal.class);
-            resp = q.getResultList();
-            s.close();
+            resp = q.getResultList();            
             if (!resp.isEmpty()) {
                 res.type("application/json");
-                return g.toJson(resp);
+                res.body(g.toJson(resp));
+                s.close();
+                return res.body();
             }
             else {
                 res.status(404);
+                s.close();
                 return "No hay sucursales registradas.";
             }          
         }
         catch (Exception e){
-            e.printStackTrace();
-            return "Error.";
+            res.status(500);
+            return e.toString();
         }        
+        finally {
+            if (s != null)
+                s.close();
+        }
     };
     
     public static Route crear = (req, res) -> {
         Gson g = new Gson ();
-        Sucursal s = g.fromJson (req.body(), Sucursal.class);
+        Sucursal suc = g.fromJson (req.body(), Sucursal.class);
+        Session s = null;
         try {
-            Session t = HibernateUtil.getSessionFactory().openSession();
-            t.beginTransaction();
-            t.persist(s);
-            t.getTransaction().commit();
-            t.close();
+            s = HibernateUtil.getSessionFactory().openSession();
+            s.beginTransaction();
+            s.persist(suc);
+            s.getTransaction().commit();            
             res.type("application/json");
-            return g.toJson(s);
-        } /*
-        catch (PropertyValueException e) {
-            e.printStackTrace();
-            return "Excepción: el campo " + e.getPropertyName() + " es nulo.";
-        } */
-        catch (ConstraintViolationException e) {
-            e.printStackTrace();            
-            return "Valor duplicado: " + e.getConstraintName();            
-        }
+            res.body(g.toJson(suc));
+            s.close();
+            return res.body();
+        }       
         catch (Exception e) {
-            e.printStackTrace();
-            return "Excepción";
+            res.status(500);
+            return e.toString();
+        }
+        finally {
+            if (s != null)
+                s.close();
         }
     };
     
     public static Route leer = (req, res) -> {
         Gson g = new Gson();
-        Sucursal t = null;
+        Sucursal suc = null;       
+        Session s = null; 
         try {
             long id = Long.parseLong(req.params(":id"));
-            Session s = HibernateUtil.getSessionFactory().openSession();
+            s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
-            t = s.get(Sucursal.class, id);
-            s.getTransaction().commit();
-            s.close();
-            if (t != null) {
+            suc = s.get(Sucursal.class, id);
+            s.getTransaction().commit();            
+            if (suc != null) {
                 res.type("application/json");
-                return g.toJson(t);
+                res.body(g.toJson(suc));
+                s.close();
+                return res.body();
             }            
             else { 
                 res.status(404);
+                s.close();
                 return "No se encontró sucursal con ese id (" + id + ").";
             }
         }
         catch (Exception e) {
             res.status(500);
-            e.printStackTrace();
-            return "Excepción.";
-        }                
+            return e.toString();
+        }
+        finally {
+            if (s != null)
+                s.close();
+        }
     };
     
     public static Route actualizar = (req, res) -> {
         Gson g = new Gson();
         long id = Long.parseLong(req.params(":id"));
-        Sucursal tu = g.fromJson(req.body(), Sucursal.class);
-        Sucursal t = null;
+        Sucursal front = g.fromJson(req.body(), Sucursal.class);
+        Sucursal db = null;
+        Session s = null;
         try {
-            Session s = HibernateUtil.getSessionFactory().openSession();
+            s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
-            t = s.get(Sucursal.class, id);            
-            if (t != null) { /* Campos a actualizar: codigo, cantidadEmpleados, nombre, entidad */
-                if (tu.getCodigo() != null) {
-                    t.setCodigo(tu.getCodigo());
+            db = s.get(Sucursal.class, id);            
+            if (db != null) {
+                /* codigo, cantidadEmpleados, nombre, domicilio,
+                entidad, contratos, asaltos 
+                */
+                if (front.getCodigo() == null) {
+                    front.setCodigo(db.getCodigo());
                 }
-                if (tu.getCantidadEmpleados() != null) {
-                    t.setCantidadEmpleados(tu.getCantidadEmpleados());
+                if (front.getCantidadEmpleados() == null) {
+                    front.setCantidadEmpleados(db.getCantidadEmpleados());
                 }
-                if (tu.getNombre() != null) {
-                    t.setNombre(tu.getNombre());
+                if (front.getNombre() == null || front.getNombre().equals("")) {
+                    front.setNombre(db.getNombre());
                 }
-                s.update(t);
-                s.getTransaction().commit();
-                s.close();
+                if (front.getDomicilio() == null || front.getDomicilio().equals("")) {
+                    front.setDomicilio(db.getDomicilio());
+                }
+                if (front.getEntidad() == null) { 
+                    front.setEntidad(db.getEntidad());
+                }
+                else  // logica para desasociar
+                    if (front.getEntidad() == -1) {
+                        front.setEntidad(null);
+                    }                
+                if (front.getContratos() == null) {
+                    front.setContratos(db.getContratos());
+                }
+                if (front.getAsaltos() == null) {
+                    front.setAsaltos(db.getAsaltos());
+                }                         
+                s.merge(front);
+                s.getTransaction().commit();                
                 res.type("application/json");
-                return g.toJson(t);
+                res.body(g.toJson(front));
+                s.close();
+                return res.body();
             }
             else {
                 res.status(404);
+                s.close();
                 return "No se encontró sucursal con ese id (" + id + ").";
             }
         }
         catch (Exception e) {
             res.status(500);
-            e.printStackTrace();
-            return "Excepción.";
-        }        
+            return e.toString();
+        }       
+        finally {
+            if (s != null)
+                s.close();
+        } 
     };
     
     public static Route borrar = (req, res) -> {
         Gson g = new Gson();
         long id = Long.parseLong(req.params(":id"));
-        Sucursal t = null;
+        Sucursal suc = null;
+        Session s = null;
         try {
-            Session s = HibernateUtil.getSessionFactory().openSession();
+            s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
-            t = s.get(Sucursal.class, id);
-            if (t != null) {
-                s.remove(t);
-                s.getTransaction().commit();
-                s.close();
+            suc = s.get(Sucursal.class, id);
+            if (suc != null) {
                 res.type("application/json");
-                return g.toJson(t);
+                res.body(g.toJson(suc));
+                s.remove(suc);
+                s.getTransaction().commit();                
+                s.close();
+                return res.body();
             }
             else {
                 res.status(404);
+                s.close();
                 return "No se encontró sucursal.";
             }            
         }
         catch (Exception e) {
-            res.status(500);
-            e.printStackTrace();
-            return "Excepción.";
-        }        
+            res.status(500);            
+            return e.toString();
+        }   
+        finally {
+            if (s != null)
+                s.close();
+        }     
     };   
     
     public static RouteGroup sucursalesRouter = () -> {
@@ -166,7 +204,6 @@ public class SucursalDAO {
         post("/", crear);
         get("/:id", leer);
         put("/:id", actualizar);
-        delete("/:id", borrar);
-        
+        delete("/:id", borrar);        
     }; 
 }

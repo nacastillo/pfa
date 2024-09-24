@@ -1,10 +1,11 @@
 package pfa.modelo;
 
-import jakarta.persistence.Column;
 import lombok.Data;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +20,10 @@ public class Vigilante extends Usuario {
     private Integer codigo;
     
     @Column 
-    private Integer edad;    
+    private Integer edad;        
     
-    @OneToMany (mappedBy = "vigilante", fetch = FetchType.EAGER)
+    @OneToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn (name = "vigilante")     
     private List <Contrato> contratos;
     
     public Vigilante () {
