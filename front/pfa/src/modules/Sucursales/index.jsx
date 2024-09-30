@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Input, InputNumber, Form, message, Modal, Table, Select, Spin } from "antd"
 import serv from "../../services/serv"
 import Todos from  "../../components/Todos";
+import { AuthContext } from "../../components/AuthContext";
 
 const layoutNuevo = {labelCol: {span: 8}, wrapperCol: {span: 16}};
 
@@ -21,7 +22,8 @@ function Sucursales() {
     const { modo } = useParams();
     const [formNuevo] = Form.useForm();
     const [formModif] = Form.useForm();
-    const [formBorra] = Form.useForm();    
+    const [formBorra] = Form.useForm();  
+    const {esAdmin, esInves} = useContext(AuthContext);
 
     const guardarID = async (x) => {        
         const y = JSON.parse(x)                          
@@ -175,7 +177,7 @@ function Sucursales() {
 
     return (
         <>
-            {!modo &&
+            {!modo && (esAdmin() || esInves()) &&
                 <> 
                     {cargando? 
                         <Spin size = "large" /> 
@@ -184,7 +186,7 @@ function Sucursales() {
                     }
                 </>
             }
-            {modo === "nuevo" &&
+            {modo === "nuevo" && esAdmin() &&
                 <>
                     <h1>Nueva sucursal </h1>
                     <Form {...layoutNuevo}
@@ -275,7 +277,7 @@ function Sucursales() {
                     </Form>
                 </>
             }
-            {modo === "buscar" &&
+            {modo === "buscar" && (esAdmin() || esInves()) &&
                 <>
                     <h1>Buscar sucursal </h1>
                     <Form
@@ -297,6 +299,7 @@ function Sucursales() {
                                 ))}
                             </Select>
                         </Form.Item>
+                        {esAdmin() &&
                         <Form.Item name = "modalB">
                             <Modal
                                 keyboard = {false}
@@ -328,6 +331,7 @@ function Sucursales() {
                                 Borrar sucursal
                             </Button>
                         </Form.Item>
+                        }
                     </Form>
                     {mostrarDatos &&
                         <>
@@ -341,6 +345,7 @@ function Sucursales() {
                             <b>Asaltos recibidos: </b>{entidadM.asaltos.length} <br/>
                             <b>Contratos realizados: </b>{entidadM.contratos.length} <br/>
                             <br/>
+                            {esAdmin() &&
                             <Button type = "primary"
                                 style = {{width: 130}}
                                 htmlType = "button"
@@ -348,6 +353,7 @@ function Sucursales() {
                             >
                                 Modificar
                             </Button>
+                            }
                         </>
                     }
                     {modif && 

@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Input, InputNumber, Form, message, Modal, Select, Spin, Table } from "antd";
 import serv from "../../services/serv"
 import Todos from  "../../components/Todos"
+import { AuthContext } from "../../components/AuthContext";
 
 const layoutNuevo = {labelCol: {span:8}, wrapperCol: {span:16}};
 
@@ -20,6 +21,7 @@ function Entidades() {
     const [formNuevo] = Form.useForm();
     const [formModif] = Form.useForm();
     const [formBorra] = Form.useForm();
+    const {esAdmin, esInves} = useContext(AuthContext);
 
     const guardarID = async (x) => {
         const y = JSON.parse(x)        
@@ -123,7 +125,7 @@ function Entidades() {
 
     return (
         <>
-            {!modo &&
+            {!modo && (esInves() || esAdmin()) &&
                 <>
                     {cargando?
                     <Spin size = "large" />
@@ -133,7 +135,7 @@ function Entidades() {
                     </>}
                 </>
             }
-            {modo === "nuevo" &&
+            {modo === "nuevo" && esAdmin() &&
                 <>
                     <h1>Nueva entidad </h1>
                     <Form {...layoutNuevo}
@@ -200,7 +202,7 @@ function Entidades() {
                     </Form>
                 </>
             }
-            {modo === "buscar" &&
+            {modo === "buscar" && (esAdmin() || esInves()) &&
                 <>
                     <h1>Buscar entidad </h1>
                     <Form
@@ -224,6 +226,7 @@ function Entidades() {
                                 }
                             </Select>
                         </Form.Item>
+                        {esAdmin() &&
                         <Form.Item name = "modalB">
                             <Modal
                                 keyboard = {false}
@@ -253,6 +256,7 @@ function Entidades() {
                                 Borrar entidad
                             </Button>
                         </Form.Item>
+                        }
                     </Form>
                     {mostrarDatos && 
                         <>
@@ -263,6 +267,7 @@ function Entidades() {
                             <b>Domicilio central: </b> {entidadM.domicilio} <br/>                            
                             <b>Sucursales asignadas: </b>{entidadM.sucursales.length} <br/>
                             <br/>
+                            {esAdmin() &&
                             <Button type = "primary"
                                 style = {{width: 110}}
                                 htmlType = "button"
@@ -270,6 +275,7 @@ function Entidades() {
                             >
                                 Modificar
                             </Button>
+                            }
                         </>
                     }
                     {modif && 

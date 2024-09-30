@@ -1,10 +1,11 @@
 package pfa.controlador;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import java.util.List;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
+//import org.hibernate.query.Query;
 import spark.Route;
 import spark.RouteGroup;
 import static spark.Spark.get;
@@ -21,17 +22,43 @@ import pfa.util.HibernateUtil;
 public class AsaltoDAO {
     
     public static Route getAll = (req, res) -> {
-        Gson g = new Gson();
+        var g = new Gson();
+        var ja = new JsonArray();
         List <Asalto> x = null;
-        Session s = null;        
+        var s = HibernateUtil.getSessionFactory().openSession();
+        //Session s = null;        
         try {
-            s = HibernateUtil.getSessionFactory().openSession();
+            //s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
-            Query q = s.createQuery("from Asalto", Asalto.class);
+            var q = s.createQuery("from Asalto", Asalto.class);
+            //Query q = s.createQuery("from Asalto", Asalto.class);
             x = q.getResultList();            
             if (!x.isEmpty()) {
+                for (Asalto a : x) {
+                    var jo = g.toJsonTree(a).getAsJsonObject();
+                    if (a.getSucursal() != null) {
+                        var suc = s.get(Sucursal.class, a.getSucursal());                        
+                        if (suc.getEntidad() != null) {
+                            var ent = s.get(Entidad.class, suc.getEntidad());
+                            jo.addProperty("nombreSucursal",String.format("%s (%s)",suc.getNombre(), ent.getNombre()));
+                        }
+                        else {
+                            jo.addProperty("nombreSucursal",suc.getNombre());
+                        }
+                    }
+                    if (a.getJuez() != null) {
+                        var j = s.get(Juez.class, a.getJuez());
+                        jo.addProperty("nombreJuez",j.getNombre());
+                    }
+                    if (a.getDetenido() != null) {
+                        var d = s.get(Detenido.class, a.getDetenido());
+                        jo.addProperty("nombreDetenido",d.getNombre());
+                    }
+                    ja.add(jo);
+                }
                 res.type("application/json");
-                res.body(g.toJson(x));
+                //res.body(g.toJson(x));
+                res.body(g.toJson(ja));
                 s.close();
                 return res.body();
             }

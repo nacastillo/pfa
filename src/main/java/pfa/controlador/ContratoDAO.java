@@ -1,10 +1,11 @@
 package pfa.controlador;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import java.util.List;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
+//import org.hibernate.query.Query;
 import spark.Route;
 import spark.RouteGroup;
 import static spark.Spark.delete;
@@ -21,16 +22,37 @@ public class ContratoDAO {
 
     public static Route getAll = (req, res) -> {
         Gson g = new Gson();
+        JsonArray ja = new JsonArray();
         List <Contrato> x = null;
         Session s = null;
         try {
             s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
-            Query q = s.createQuery("from Contrato", Contrato.class);
+            var q = s.createQuery("from Contrato", Contrato.class);
+            //Query q = s.createQuery("from Contrato", Contrato.class);
             x = q.getResultList();            
             if (!x.isEmpty()) {
+                for (Contrato cont : x) {
+                    JsonObject jo = g.toJsonTree(cont).getAsJsonObject();
+                    if (cont.getVigilante() != null) {
+                        Vigilante vig = s.get(Vigilante.class, cont.getVigilante());
+                        jo.addProperty("nombreVigilante", vig.getUsr());
+                    }
+                    if (cont.getSucursal() != null) {
+                        Sucursal suc = s.get(Sucursal.class, cont.getSucursal());
+                        if (suc.getEntidad() != null) {
+                            Entidad ent = s.get(Entidad.class, suc.getEntidad());
+                            jo.addProperty("nombreSucursal",String.format("%s (%s)",suc.getNombre(), ent.getNombre()));
+                        }
+                        else {
+                            jo.addProperty("nombreSucursal",suc.getNombre());
+                        }
+                    }
+                    ja.add(jo);
+                }
+                //res.body(g.toJson(x));
                 res.type("application/json");
-                res.body(g.toJson(x));
+                res.body(g.toJson(ja));
                 s.close();
                 return res.body();
             }
@@ -75,7 +97,7 @@ public class ContratoDAO {
     };
     
     public static Route leer = (req, res) -> {
-        Gson g = new Gson();
+        //Gson g = new Gson();
         JsonObject jo = new JsonObject();
         Vigilante vig = null;
         Sucursal suc = null;

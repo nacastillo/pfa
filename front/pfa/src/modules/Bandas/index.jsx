@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Input, InputNumber, Form, message, Modal, Select, Spin } from "antd";
 import serv from "../../services/serv";
 import Todos from  "../../components/Todos";
+import { AuthContext } from "../../components/AuthContext";
 
 const layoutNuevo = {labelCol: {span: 8}, wrapperCol: {span: 16}};
 
@@ -20,6 +21,7 @@ function Bandas() {
     const [formNuevo] = Form.useForm();
     const [formModif] = Form.useForm();
     const [formBorra] = Form.useForm();
+    const {esAdmin, esInves} = useContext(AuthContext);
 
     const guardarID = async (x) => {
         const y = JSON.parse(x)        
@@ -117,7 +119,7 @@ function Bandas() {
 
     return (
         <>
-            {!modo &&
+            {!modo && (esAdmin() || esInves()) &&
                 <>
                     {cargando? 
                         <Spin size = "large" /> 
@@ -126,7 +128,7 @@ function Bandas() {
                     }
                 </>                
             }
-            {modo === "nuevo" &&
+            {modo === "nuevo" && esAdmin() && 
                 <>
                     <h1>Nueva banda</h1>
                     <Form {...layoutNuevo}
@@ -184,7 +186,7 @@ function Bandas() {
                     </Form>
                 </>
             }
-            {modo === "buscar" &&
+            {modo === "buscar" && (esAdmin() || esInves()) &&
                 <>
                     <h1>Buscar banda </h1>
                     <Form
@@ -205,6 +207,7 @@ function Bandas() {
                                     </Select.Option>))}
                             </Select>
                         </Form.Item>
+                        {esAdmin() &&
                         <Form.Item name = "modalB">                            
                             <Modal
                                 keyboard = {false}
@@ -233,6 +236,7 @@ function Bandas() {
                                 Borrar banda
                             </Button>
                         </Form.Item>
+                        }
                     </Form>
                     {mostrarDatos && 
                         <>
@@ -240,13 +244,16 @@ function Bandas() {
                             <b>ID:</b> {entidadM.id} <br />
                             <b>Numero:</b> {entidadM.numero} <br />
                             <b>Nombre:</b> {entidadM.nombre} <br />   
+                            <b>Cantidad de miembros:</b> {entidadM.miembros.length} <br />  
                             <br/>
+                            {esAdmin() &&
                             <Button style = {{width: 110}} 
                                 type = "primary" 
                                 htmlType="button" 
                                 onClick={() => setModif(!modif)}>
                                 Modificar
-                            </Button>                            
+                            </Button>
+                            }
                         </>
                     }
                     {modif && 

@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Input, InputNumber, Form, message, Modal, Table, Select, Spin } from "antd"
 import serv from "../../services/serv"
 import Todos from  "../../components/Todos"
+import { AuthContext } from "../../components/AuthContext";
 
 const layoutNuevo = { labelCol: {span: 8} , wrapperCol: {span: 16}}
 
@@ -22,7 +23,8 @@ function Detenidos () {
     const [formNuevo] = Form.useForm();
     const [formModif] = Form.useForm();
     const [formBorra] = Form.useForm();
-    
+    const {esAdmin, esInves} = useContext(AuthContext);
+
     async function guardarID (x) {
         const y = JSON.parse(x)
         if (y.banda) {
@@ -155,7 +157,7 @@ function Detenidos () {
 
     return (
         <>
-            {!modo &&
+            {!modo && (esAdmin() || esInves()) &&
                 <> 
                     {cargando? 
                         <Spin size = "large" />
@@ -164,7 +166,7 @@ function Detenidos () {
                     }
                 </>
             }
-            {modo === "nuevo" &&
+            {modo === "nuevo" && esAdmin() &&
                 <>
                     <h1>Nuevo detenido </h1>
                     <Form {...layoutNuevo}
@@ -235,7 +237,7 @@ function Detenidos () {
                     </Form>
                 </>
             }
-            {modo === "buscar" &&
+            {modo === "buscar" && (esAdmin() || esInves()) &&
                 <>
                     <h1>Buscar detenido </h1>
                     <Form
@@ -257,6 +259,7 @@ function Detenidos () {
                                 ))}
                             </Select>
                         </Form.Item>
+                        {esAdmin() &&
                         <Form.Item name = "b">
                             <Modal
                                 keyboard = {false}
@@ -286,6 +289,7 @@ function Detenidos () {
                                 Borrar detenido
                             </Button>                            
                         </Form.Item>
+                        }
                     </Form>
                     {mostrarDatos && 
                         <>
@@ -295,6 +299,7 @@ function Detenidos () {
                             Nombre: <b>{entidadM.nombre}</b> <br />
                             Banda: <b>{entidadM.nombreBanda || "no tiene"}</b> <br />
                             <br/>
+                            {esAdmin() && 
                             <Button style = {{width: 130}}
                                 type = "primary"
                                 htmlType = "button"
@@ -302,6 +307,7 @@ function Detenidos () {
                             >
                                 Modificar
                             </Button>
+                            }
                         </>
                     }
                     {modif && 

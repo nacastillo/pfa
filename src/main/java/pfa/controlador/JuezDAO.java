@@ -3,7 +3,7 @@ package pfa.controlador;
 import com.google.gson.Gson;
 import java.util.List;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
+//import org.hibernate.query.Query;
 import spark.Route;
 import spark.RouteGroup;
 import static spark.Spark.get;
@@ -22,7 +22,8 @@ public class JuezDAO {
         try {
             s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
-            Query q = s.createQuery("from Juez", Juez.class);
+            //Query q = s.createQuery("from Juez", Juez.class);
+            var q = s.createQuery("from Juez", Juez.class);
             resp = q.getResultList();            
             if (!resp.isEmpty()) {                
                 res.type("application/json");  

@@ -1,9 +1,11 @@
 package pfa.controlador;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.util.List;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
+//import org.hibernate.query.Query;
 import spark.Route;
 import spark.RouteGroup;
 import static spark.Spark.get;
@@ -11,22 +13,33 @@ import static spark.Spark.post;
 import static spark.Spark.put;
 import static spark.Spark.delete;
 import pfa.modelo.Sucursal;
+import pfa.modelo.Entidad;
 import pfa.util.HibernateUtil;
 
 public class SucursalDAO {
 
     public static Route getAll = (req, res) -> {
         Gson g = new Gson();
+        JsonArray ja = new JsonArray();        
         List <Sucursal> resp = null;
         Session s = null;        
         try {
             s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
-            Query q = s.createQuery("from Sucursal", Sucursal.class);
-            resp = q.getResultList();            
-            if (!resp.isEmpty()) {
+            var q = s.createQuery("from Sucursal", Sucursal.class);
+            resp = q.getResultList();
+            if (!resp.isEmpty()) {                
+                for (Sucursal suc : resp) {
+                    JsonObject jo = g.toJsonTree(suc).getAsJsonObject();
+                    if (suc.getEntidad() != null) {
+                        Entidad e = s.get(Entidad.class, suc.getEntidad());
+                        jo.addProperty("nombreEntidad",e.getNombre());
+                    }
+                    ja.add(jo);
+                }
+                //res.body(g.toJson(resp));
                 res.type("application/json");
-                res.body(g.toJson(resp));
+                res.body(g.toJson(ja));
                 s.close();
                 return res.body();
             }

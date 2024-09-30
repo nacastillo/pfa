@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, DatePicker, InputNumber, Form, message, Modal, Select, Spin } from "antd";
 import serv from "../../services/serv"
 import Todos from  "../../components/Todos";
+import { AuthContext } from "../../components/AuthContext";
 
 const layoutNuevo = {labelCol: {span: 8}, wrapperCol: {span: 16}};
 
@@ -80,6 +81,7 @@ function Asaltos() {
     const [formNuevo] = Form.useForm();
     const [formModif] = Form.useForm();
     const [formBorra] = Form.useForm();
+    const {esAdmin, esInves, esVigi, getServicios } = useContext(AuthContext);
 
     async function completar (x) {
         let y = JSON.parse(x);
@@ -279,7 +281,7 @@ function Asaltos() {
 
     return (
         <>
-            {!modo &&
+            {!modo && (esAdmin() || esInves()) &&
                 <>
                     {cargando? 
                         <Spin size = "large" /> 
@@ -288,7 +290,7 @@ function Asaltos() {
                     }
                 </>
             }
-            {modo === "nuevo" &&
+            {modo === "nuevo" && esAdmin() &&
                 <>
                     <h1>Dar de alta asalto</h1>
                     <Form {...layoutNuevo} 
@@ -405,7 +407,7 @@ function Asaltos() {
                     </Form>                
                 </>
             }
-            {modo === "buscar" &&
+            {modo === "buscar" && (esAdmin() || esInves()) &&
                 <>
                     <h1>Buscar asalto</h1>
                     <Form
@@ -430,6 +432,7 @@ function Asaltos() {
                                 ))}
                             </Select>
                         </Form.Item>
+                        {esAdmin() &&
                         <Form.Item name = "modalB">
                             <Modal
                                 keyboard = {false}
@@ -484,20 +487,23 @@ function Asaltos() {
                                 Borrar asalto
                             </Button>
                         </Form.Item>
+                        }
                     </Form>
                     {mostrarDatos && 
                         <>
-                            {mostrar(entidadM)}
+                            {mostrar(entidadM)}                        
+                            {esAdmin() &&                         
                             <Button type = "primary"
                                 style = {{width: 130}}
                                 htmlType = "button"
                                 onClick = {() => setModif(!modif)}
                             >
-                                Modificar
-                            </Button>
+                                Modificar                            
+                            </Button>                        
+                        }
                         </>
                     }
-                    {modif &&
+                    {modif && esAdmin() &&
                         <>
                             <Form
                                 {...layoutNuevo}

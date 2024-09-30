@@ -1,12 +1,6 @@
 package pfa.util;
 
 import static io.leego.banana.BananaUtils.bananaify;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import static com.google.gson.JsonParser.parseString;
-import org.hibernate.SessionFactory;
-import spark.Request;
-import spark.Filter;
 import static spark.Spark.before;
 import static spark.Spark.post;
 import static spark.Spark.options;
@@ -22,76 +16,49 @@ import static pfa.controlador.EntidadDAO.entidadesRouter;
 import static pfa.controlador.AsaltoDAO.asaltosRouter;
 import static pfa.controlador.DetenidoDAO.detenidosRouter;
 import static pfa.controlador.Login.loginRuta;
-import static pfa.controlador.UsuarioDAO.getByUsrAndPwd;
 import static pfa.util.HibernateUtil.getSessionFactory;
-import static pfa.util.JWTUtil.generar;
 import static pfa.util.JWTUtil.verificar;
-import static pfa.util.JWTUtil.limpiar;
 import static pfa.util.JWTUtil.extraerRol;
+import static pfa.util.JWTUtil.limpiar;
 
 public class App {    
-
-    public static Filter filtrar = (req, res) -> {
-        if (req.uri().equals("/login")) {
-            return;
-        }
-        final String token = req.headers("Authorization");
-        System.out.println("token es:\n" + token);
-        if (token == null) {
-            halt(400, "token nulo");
-            /*
-            final Gson g = new Gson();            
-            final JsonObject jo = parseString(login(req)).getAsJsonObject();
-            if (noEsUserValido(jo)) {                        
-                halt(401, "Usuario no válido");
-            }            
-            else {                
-                //res.body(generar(jo));
-                //res.header("Authorization",generar(jo));
-                //halt(200, "Usuario:\n" + g.toJson(jo));
-                halt(200, generar(jo));
-            }
-            */
-        }
-        else {
-            if (verificar(limpiar(token))) {            
-                System.out.println("verificarToken dio verdadero, token es:\n" + token);
-                System.out.println("rol es:\n" + extraerRol(limpiar(token)));                
-            }
-            else {
-                System.out.println("verificarToken dio falso, token es:\n" + token);
-                halt(401, "token no válido");
-            }
-        }
-    };    
 
     public static void ejecutar (int puerto) {
         port(puerto);
         habilitarCORS();
-        SessionFactory s = getSessionFactory();
+        var s = getSessionFactory();
         if (s == null) {
             System.out.println("Problemas con sessionFactory. Compruebe si se ejecuta mysql en xampp.");
             System.exit(0);
         }
-        System.out.println((bananaify("Policia\nFederal\nArgentina")));                
-        System.out.println("Corriendo back en puerto: " + puerto);        
+        System.out.println((bananaify("Policia\nFederal\nArgentina")));
+        System.out.println("Corriendo back en puerto: " + puerto);
+        cargarRutas();
+    }        
+
+    public static void cargarRutas () {
+        before ("/*", (req, res) -> {
+            if (req.uri().equals("/login")) {
+                return;
+            }
+            var token = req.headers("Authorization");        
+            if (token == null) {
+                halt(400, "token nulo");            
+            }
+            else {            
+                if (!verificar(limpiar(token))) {
+                    halt(401, "token no válido");                
+                }            
+            }            
+            var rol = extraerRol(limpiar(req.headers("Authorization")));
+            if (rol.equals("Vigilante")) {
+                halt(403, "Acceso denegado a Vigilante");
+            }
+            if (rol.equals("Investigador") && !req.requestMethod().equals("GET")) {
+                halt(403, "Acceso denegado a Investigador");
+            }
+        });
         post("/login", loginRuta);
-        before ("/*", filtrar);        
-        cargarPaths();
-    }    
-
-    public static String login (Request req) {        
-        final JsonObject jo = parseString(req.body()).getAsJsonObject();
-        final String a = getByUsrAndPwd(jo.get("usr").getAsString(),jo.get("pwd").getAsString());
-        System.out.println("a es:\n" + a);
-        return a;
-    }
-
-    public static boolean noEsUserValido (JsonObject jo) {
-        return (jo.get("usr").getAsString().equals("-1"));
-    }
-
-    public static void cargarPaths () {        
         path("u", usuariosRouter);
         path("s", sucursalesRouter);
         path("j", juecesRouter);
@@ -103,9 +70,8 @@ public class App {
     }
 
     public static void habilitarCORS () {
-        options("/*", (req, res) -> {
-
-            res.status(200);
+        
+        options("/*", (req, res) -> {            
             String headers = req.headers("Access-Control-Request-Headers");
             if (headers != null) {
                 res.header("Access-Control-Allow-Headers", headers);
@@ -114,17 +80,17 @@ public class App {
             if (method != null) {
                 res.header("Access-Control-Allow-Methods", method);
             }
+            res.status(200);
             return "OK";
-        });
-        before((req, res) -> {
-            //res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+        });        
+        
+        before((req, res) -> {            
             res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Request-Method", "GET, POST, PUT, DELETE, OPTIONS");
-            res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization");
-            //res.header("Access-Control-Allow-Credentials","false");
+            res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");                        
             if (req.requestMethod().equalsIgnoreCase("OPTIONS")) {
-                halt(200);  // Responder OK sin hacer más validaciones
-            }
+                halt(200);
+            }            
         });
     }
 }

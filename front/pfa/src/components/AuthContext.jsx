@@ -30,8 +30,9 @@ export const AuthProvider = ({ children }) => {
             //const decoded = jwt_decode(token);
             setAutenticado(true);
         }
-        catch (e) {
-            console.log(e);
+        catch (e) {            
+            console.log(e.message)
+            throw new Error();
         }
     }
 
@@ -46,10 +47,10 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem("nicastillo.prog2");
-        localStorage.removeItem("nicastillo.rol");
+        //localStorage.removeItem("nicastillo.rol");
         //alert("logout");
         setAutenticado(false);
-        setRol("");
+        //setRol("");
     }
 
     const esVigi = () => {
@@ -90,6 +91,20 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    function getServicios () {
+        if (getRol() === "Vigilante") {
+            const decoded = jwt_decode(localStorage.getItem("nicastillo.prog2"));  
+            //console.log(decoded.contratos);
+            //const a = JSON.parse(decoded.contratos);
+            //console.log(a);
+            //return decoded.contratos;
+            console.log(JSON.parse(decoded.contratos));
+            return JSON.parse(decoded.contratos);
+        }
+    }
+
+
+
     useEffect( () => {
         checkAuth();
 
@@ -112,6 +127,7 @@ export const AuthProvider = ({ children }) => {
             esAdmin, 
             getUserName,
             getRol,
+            getServicios,
             login, 
             login2, 
             logout}}>

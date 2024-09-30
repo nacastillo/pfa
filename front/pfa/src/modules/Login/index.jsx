@@ -1,6 +1,6 @@
 import { useNavigate, useParams, redirect } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import { Button, Checkbox, Input, Form} from "antd"
+import { Button, Checkbox, Input, Form, message} from "antd"
 import serv from "../../services/serv"
 import { AuthContext } from "../../components/AuthContext";
 
@@ -9,8 +9,9 @@ function Login() {
     const {login, login2, logout} = useContext(AuthContext);
 
     const navigate = useNavigate(); 
+    const [formLogin] = Form.useForm();
 
-    const onFinish = (values) => {
+    const onFinish = async (values) => {
         /*
         console.log('Success:', values);
         //let token = await serv.login();
@@ -26,11 +27,18 @@ function Login() {
             //return redirect("/usuarios");
         }
         */
-        login2(values.usr, values.pwd);
+        try {
+            await login2(values.usr, values.pwd);            
+            formLogin.resetFields();
+            navigate("/");
+        }
+        catch (err) {
+            message.error("Usuario o contraseña inválida");
+        }
     };
 
     const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
+        console.log('Failed:', errorInfo);        
     };
 
     /*
@@ -41,9 +49,10 @@ function Login() {
     
     return (
         <>
-            <h1>Hola</h1>
+            <h1>Iniciar sesión</h1>
             <Form
-                name="basic"
+                form = {formLogin}
+                name = "basic"
                 labelCol={{
                     span: 8,
                 }}

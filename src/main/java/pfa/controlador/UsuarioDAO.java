@@ -28,7 +28,8 @@ public class UsuarioDAO {
         try {
             s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();        
-            Query q = s.createQuery("from Usuario", Usuario.class);
+            var q = s.createQuery("from Usuario", Usuario.class);
+            //Query q = s.createQuery("from Usuario", Usuario.class);
             x = q.getResultList();            
             if (!x.isEmpty()) {
                 res.type("application/json");
@@ -267,8 +268,24 @@ public class UsuarioDAO {
         s.close();
         return x;        
     }
-    
-    public static RouteGroup usuariosRouter = () -> {            
+
+    /*
+
+    public static Usuario getByUsrAndPwd2 (String u, String p) {
+        Gson g = new Gson();
+        String x, hql = String.format("FROM Usuario WHERE usr = '%s' AND pwd = '%s'", u, p);
+        Session s = HibernateUtil.getSessionFactory().openSession();
+        s.beginTransaction();
+        Query <Usuario> query = s.createQuery(hql, Usuario.class);
+        Usuario usr = query.uniqueResult();         
+        s.getTransaction().commit();
+        s.close();
+        return usr;
+    }
+  
+    */
+
+    public static RouteGroup usuariosRouter = () -> {        
         get("", getAll);
         get("/", getAll);
         post("", crear);

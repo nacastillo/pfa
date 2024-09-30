@@ -25,7 +25,8 @@ function setHeader (ent) {
             col.push(setCol("Código", "codigo", "codigo", 10));
             col.push(setCol("Nombre", "nombre", "nombre", 20));
             col.push(setCol("Domicilio", "domicilio", "domicilio", 30));
-            col.push(setCol("Entidad", "entidad", "entidad", 20, r => r || "no tiene"));            
+            col.push(setCol("ID entidad", "entidad", "entidad", 20, r => r || "no tiene"));            
+            col.push(setCol("Entidad", "nombreEntidad", "nombreEntidad", 20, r => r || "no tiene"));            
             col.push(setCol("Empleados", "cantidadEmpleados", "cantidadEmpleados", 10));
             col.push(setCol("Contratos", "contratos", "contratos", 20, r => r.length));
             col.push(setCol("Asaltos", "asaltos", "asaltos", 20, r => r.length));
@@ -44,8 +45,10 @@ function setHeader (ent) {
         case "contratos":
             col.push(setCol("Código", "codigo", "codigo", 10));
             col.push(setCol("Fecha", "fecha", "fecha", 25));
-            col.push(setCol("Vigilante", "vigilante", "vigilante", 25, r => r || "no tiene"));
-            col.push(setCol("Sucursal", "sucursal", "sucursal", 25, r => r || "no tiene"));
+            col.push(setCol("ID Vigilante", "vigilante", "vigilante", 25, r => r || "no tiene"));
+            col.push(setCol("Vigilante", "nombreVigilante", "nombreVigilante", 25, r => r || "no tiene"));
+            col.push(setCol("ID Sucursal", "sucursal", "sucursal", 25, r => r || "no tiene"));
+            col.push(setCol("Sucursal", "nombreSucursal", "nombreSucursal", 25, r => r || "no tiene"));
             col.push(setCol("Armado", "armado", "armado", 5, r => r? "sí" : "no"));
             break;
         case "entidades":
@@ -57,20 +60,33 @@ function setHeader (ent) {
         case "detenidos":
             col.push(setCol("Código", "codigo", "codigo", 10));
             col.push(setCol("Nombre", "nombre", "nombre", 20));
-            col.push(setCol("Banda", "banda", "banda", 20, r => r || "no tiene"));
+            col.push(setCol("ID Banda", "banda", "banda", 20, r => r || "no tiene"));
+            col.push(setCol("Nombre Banda", "nombreBanda", "nombreBanda", 20, r => r || "no tiene"));
             col.push(setCol("Asaltos", "asaltos", "asaltos", 20, r => r.length));
             break;
         case "asaltos": 
             col.push(setCol("Código", "codigo", "codigo", 10));
             col.push(setCol("Fecha asalto", "fecha", "fecha", 16));        
-            col.push(setCol("Sucursal", "sucursal", "sucursal", 16, r => r || "no tiene"));
-            col.push(setCol("Juez", "juez", "juez", 16, r => r || "no tiene"));
-            col.push(setCol("Detenido", "detenido", "detenido", 16, r => r || "no tiene"));
-            col.push(setCol("Fecha condena", "fechaCondena", "fechaCondena", 16, r => r || "no tiene"));        
+            col.push(setCol("ID Sucursal", "sucursal", "sucursal", 16, r => r || "no tiene"));
+            col.push(setCol("Sucursal", "nombreSucursal", "nombreSucursal", 16, r => r || "no tiene"));
+            col.push(setCol("ID Juez", "juez", "juez", 16, r => r || "no tiene"));
+            col.push(setCol("Juez", "nombreJuez", "nombreJuez", 16, r => r || "no tiene"));
+            col.push(setCol("ID Detenido", "detenido", "detenido", 16, r => r || "no tiene"));
+            col.push(setCol("Detenido", "nombreDetenido", "detenido", 16, r => r || "no tiene"));
+            col.push(setCol("Fecha condena", "fechaCondena", "fechaCondena", 16, (r) => {
+                if (r) {                    
+                    const dif = Math.round((new Date (r).getTime() - new Date ().getTime()) / 86400000);
+                    return `${r} ${dif > 0? `(faltan ${dif} días)` : "(cumplida)"}`;                    
+                }
+                else {
+                    return "no asignada";
+                }
+            }));
             break;
         default:
             break;
     }
+    col.push(setCol("Accion","","",10, r => <a onClick={() => console.log(r)}>Prueba</a>));
     return col;
 }
 

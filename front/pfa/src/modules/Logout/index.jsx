@@ -1,12 +1,16 @@
 import { useNavigate} from "react-router-dom";
-import { useEffect} from "react";
+import { useContext, useEffect} from "react";
+import { AuthContext } from "../../components/AuthContext";
 
 function Logout() {
     const nav = useNavigate();
-    localStorage.removeItem("nicastillo.prog2");    
+
+    const {logout} = useContext(AuthContext);
+    //localStorage.removeItem("nicastillo.prog2");    
     //nav("/login");    
 
     useEffect (() => {
+        logout();        
         nav("/login");
     },[]);
 

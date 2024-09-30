@@ -18,7 +18,7 @@ import { AuthContext } from "./components/AuthContext"
 
 function App() {    
 
-    const {autenticado, rol, login, logout} = useContext(AuthContext);
+    const {autenticado} = useContext(AuthContext);
 
     return (        
         <div className="App">            
@@ -26,11 +26,8 @@ function App() {
                 <Routes>
                     <Route element={<Layout />}>
                         <>
-                        <Route path = "/" element={<Home />} />
-                        {!autenticado &&                        
-                            <Route path = "login" element = {<Login />} />
-                        }
-                        {autenticado &&
+                            <Route path = "/" element={<Home />} />                        
+                            {autenticado ?
                             <>                                
                                 <Route path = "usuarios/:modo?" element= {<Usuarios />} />
                                 <Route path = "sucursales/:modo?" element= {<Sucursales />}/>
@@ -40,9 +37,11 @@ function App() {
                                 <Route path = "entidades/:modo?" element= {<Entidades />} />
                                 <Route path = "asaltos/:modo?" element= {<Asaltos />} />
                                 <Route path = "detenidos/:modo?" element= {<Detenidos />} />
-                                <Route path = "logout" element = {<Logout />} />                                
+                                <Route path = "logout" element = {<Logout />} />
                             </>
-                        }                        
+                            :
+                            <Route path = "login" element = {<Login />} />
+                            }
                         <Route path = "*" element= {<NotFound />}/>
                         </>
                     </Route>

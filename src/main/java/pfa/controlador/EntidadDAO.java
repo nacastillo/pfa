@@ -3,12 +3,9 @@ package pfa.controlador;
 import com.google.gson.Gson;
 import java.util.List;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
+//import org.hibernate.query.Query;
 import spark.Route;
 import spark.RouteGroup;
-
-import static pfa.util.JWTUtil.verificar;
-import static spark.Spark.before;
 import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -25,7 +22,8 @@ public class EntidadDAO {
         try {
             s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
-            Query q = s.createQuery("from Entidad", Entidad.class);
+            var q = s.createQuery("from Entidad", Entidad.class);
+            //Query q = s.createQuery("from Entidad", Entidad.class);
             resp = q.getResultList();            
             if (!resp.isEmpty()) {
                 res.type("application/json");
@@ -180,12 +178,7 @@ public class EntidadDAO {
         }
     }; 
     
-    public static RouteGroup entidadesRouter = () -> {   
-        before("/*", (req, res) -> {
-            if (verificar(null)) {
-                String s = "";
-            }
-        });         
+    public static RouteGroup entidadesRouter = () -> {
         get("", getAll);
         get("/", getAll);
         post("", crear);

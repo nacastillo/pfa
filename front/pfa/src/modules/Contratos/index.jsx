@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Checkbox, DatePicker, InputNumber, Form, message, Modal, Select, Spin } from "antd";
 import serv from "../../services/serv";
 import Todos from "../../components/Todos";
-
+import { AuthContext } from "../../components/AuthContext";
 
 const layoutNuevo = {labelCol: {span: 8}, wrapperCol: {span: 16}};
 
@@ -79,6 +79,8 @@ function Contratos() {
     const [formNuevo] = Form.useForm();
     const [formModif] = Form.useForm();
     const [formBorra] = Form.useForm();    
+    const {esAdmin, esInves} = useContext(AuthContext);
+
 
     async function completar (x) {
         let y = JSON.parse(x);
@@ -252,7 +254,7 @@ function Contratos() {
 
     return (
         <>
-            {!modo &&
+            {!modo && (esAdmin() || esInves()) &&
                 <>
                 {cargando? 
                     <Spin size = "large" /> 
@@ -262,7 +264,7 @@ function Contratos() {
             </>
             }
 
-            {modo === "nuevo" &&
+            {modo === "nuevo" && esAdmin() &&
                 <>
                     <h1>Dar de alta contrato</h1>
                     <Form {...layoutNuevo} 
@@ -367,7 +369,7 @@ function Contratos() {
                     
                 </>
             }
-            {modo === "buscar" &&
+            {modo === "buscar" && (esAdmin() || esInves()) &&
                 <>
                     <h1>Buscar contrato </h1>
                     <Form
@@ -392,6 +394,7 @@ function Contratos() {
                                 ))}
                             </Select>
                         </Form.Item>
+                        {esAdmin() &&
                         <Form.Item name = "modalB">
                             <Modal
                                 keyboard = {false}
@@ -446,10 +449,12 @@ function Contratos() {
                                 Borrar asalto
                             </Button>
                         </Form.Item>
+                        }
                     </Form>
                     {mostrarDatos && 
                         <>
                             {mostrar(entidadM)}
+                            {esAdmin() &&
                             <Button type = "primary"
                                 style = {{width: 130}}
                                 htmlType = "button"
@@ -457,6 +462,7 @@ function Contratos() {
                             >
                                 Modificar
                             </Button>
+                            }
                         </>
                     }
                     {modif &&
