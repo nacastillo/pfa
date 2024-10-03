@@ -298,6 +298,7 @@ function Detenidos () {
                             Codigo: <b>{entidadM.codigo}</b> <br />
                             Nombre: <b>{entidadM.nombre}</b> <br />
                             Banda: <b>{entidadM.nombreBanda || "no tiene"}</b> <br />
+                            Asaltos cometidos: <b>{entidadM.asaltos.length}</b> <br />
                             <br/>
                             {esAdmin() && 
                             <Button style = {{width: 130}}

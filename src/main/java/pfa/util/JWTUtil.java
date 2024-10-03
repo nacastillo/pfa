@@ -26,8 +26,9 @@ public class JWTUtil {
             if (contratos.size() > 0) {
                 var session = getSessionFactory().openSession();                
                 for (JsonElement contratoElem : contratos) {
-                    var contrato = contratoElem.getAsJsonObject();
-                    if (contrato.get("sucursal").getAsString() != null) {
+                    var contrato = contratoElem.getAsJsonObject();                    
+                    try {
+                    //if ((Integer) contrato.get("sucursal").getAsInt() != null) {
                         session.beginTransaction();
                         var suc = session.get(Sucursal.class, contrato.get("sucursal").getAsInt());
                         if (suc.getEntidad() != null) {
@@ -38,6 +39,9 @@ public class JWTUtil {
                             contrato.addProperty("nombreSucursal", suc.getNombre());
                         }
                         session.getTransaction().commit();
+                    }
+                    catch (NullPointerException npe) {
+                        npe.printStackTrace();
                     }
                 }
                 session.close();

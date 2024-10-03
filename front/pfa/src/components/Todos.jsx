@@ -86,7 +86,7 @@ function setHeader (ent) {
         default:
             break;
     }
-    col.push(setCol("Accion","","",10, r => <a onClick={() => console.log(r)}>Prueba</a>));
+    //col.push(setCol("Accion","","",10, r => <a onClick={() => console.log(r)}>Prueba</a>));
     return col;
 }
 
