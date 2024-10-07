@@ -1,23 +1,18 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { Layout, Menu } from "antd";
 import {
-    BankOutlined,
-    BookOutlined,
+    BankOutlined,    
     CalendarOutlined,
     EnvironmentOutlined,
     HomeOutlined,
     LoginOutlined,
     LogoutOutlined,
-    MehOutlined,
-    QuestionCircleOutlined,
-    SecurityScanOutlined,
-    TagsOutlined,
+    MehOutlined,    
     TeamOutlined,
     TruckOutlined
 } from '@ant-design/icons'
 
-//import {esAdmin, esVigi, estaLoggeado} from "../../services/util";
 import { AuthContext } from "../../components/AuthContext";
 
 const { Content, Footer, Sider } = Layout
@@ -128,20 +123,7 @@ function App() {
             getItem(<Link to= "/login">Iniciar sesión</Link>, '0',<LoginOutlined />),
         autenticado && 
             getItem(<Link to= "/logout"><span style = {{color: "red"}}>Cerrar sesión</span></Link>, '111', <LogoutOutlined />)
-            /*
-        !autenticado &&
-            getItem(<button onClick = {() => login()}>Login</button>),
-        autenticado &&
-            getItem(<button onClick = {() => logout()}>Logout</button>),        
-        */
-    ];
-    
-    /*
-    console.log("autenticado es");
-    console.log(autenticado);
-    console.log("rol es:");
-    console.log(rol);
-    */
+    ];     
 
     return (
         <Layout style={contenedor}> {/* contenedor */}
@@ -149,7 +131,7 @@ function App() {
                 <Sider width="200" style={siderStyle}>
                     <img style = {{display: "block", marginTop: "25px", marginLeft: "auto", marginRight: "auto"}} src = "/escudo.png"></img>
                     <h1 style = {{textAlign: "center"}}>
-                        Policia Federal<br/> Argentina
+                        Policía Federal<br/> Argentina
                     </h1>
                     <span style = {{display: "flex", justifyContent: "center"}}>
                         {autenticado? 

@@ -18,8 +18,7 @@
             com.mysql.cj.jdbc.Driver
         </property>
         <property name="hibernate.connection.url">
-            <!-- jdbc:mysql://127.0.0.1:3306/pfa -->
-            jdbc:mysql://192.168.0.5:3306/pfa
+            jdbc:mysql://127.0.0.1:3306/pfa            
             </property>
         <property name="hibernate.connection.username">
             admin

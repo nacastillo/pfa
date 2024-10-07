@@ -1,7 +1,6 @@
 import api from './api'
 
-const serv = {} // crea objeto vacío y luego le agrega atributos
-
+const serv = {}
 serv.login = (u, p) => api.post('/login', { usr: u, pwd: p })
 serv.getAll = (ruta) => api.get(`/${ruta}`)
 serv.crear = (ruta, objeto) => api.post(`/${ruta}`, objeto)
