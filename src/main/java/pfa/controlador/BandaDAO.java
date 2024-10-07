@@ -3,7 +3,7 @@ package pfa.controlador;
 import com.google.gson.Gson;
 import java.util.List;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
+//import org.hibernate.query.Query;
 import spark.Route;
 import spark.RouteGroup;
 import static spark.Spark.get;
@@ -17,102 +17,161 @@ public class BandaDAO {
 
     public static Route getAll = (req, res) -> {
         Gson g = new Gson();
-        Session s = HibernateUtil.getSessionFactory().openSession();
-        s.beginTransaction();
-        Query q = s.createQuery("from Banda");
-        List<Banda> resp = q.getResultList();
-        s.close();
-        res.type("application/json");
-        return g.toJson(resp);
+        List <Banda> x = null;
+        Session s = null;        
+        try {
+            s = HibernateUtil.getSessionFactory().openSession();
+            s.beginTransaction();            
+            var q = s.createQuery("from Banda", Banda.class);
+            //Query q = s.createQuery("from Banda", Banda.class);
+            x = q.getResultList();            
+            if (!x.isEmpty()) {
+                res.type("application/json");
+                res.body(g.toJson(x));
+                s.close();
+                return res.body();
+            }
+            else {
+                res.status(404);
+                return "No hay bandas registradas.";
+            }
+        }
+        catch (Exception e) {
+            res.status(500);
+            return e.toString();
+        }
+        finally {
+            if (s != null)
+                s.close();
+        }
     };
 
     public static Route crear = (req, res) -> {
         Gson g = new Gson();
-        Banda b = g.fromJson(req.body(), Banda.class);
+        Banda x = g.fromJson(req.body(), Banda.class);
+        Session s = null;
         try {
-            Session s = HibernateUtil.getSessionFactory().openSession();
+            s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
-            s.save(b);
-            s.getTransaction().commit();
-            s.close();
+            s.persist(x);
+            s.getTransaction().commit();            
             res.type("application/json");
-            return g.toJson(b);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "error";
+            res.body(g.toJson(x));
+            s.close();
+            return res.body();
+        } 
+        catch (Exception e) {
+            res.status(500);
+            return e.toString();
+        }
+        finally {
+            if (s != null)
+                s.close();
         }
     };
 
     public static Route leer = (req, res) -> {
         Gson g = new Gson();
-        Banda b = null;
+        Banda x = null;
+        Session s = null;
         try {
             long id = Long.parseLong(req.params(":id"));
-            Session s = HibernateUtil.getSessionFactory().openSession();
+            s = HibernateUtil.getSessionFactory().openSession();
             s.beginTransaction();
-            b = s.get(Banda.class, id);
-            s.getTransaction().commit();
-            s.close();
-        } 
+            x = s.get(Banda.class, id);
+            s.getTransaction().commit();            
+            if (x != null) {
+                res.type("application/json");
+                res.body(g.toJson(x));
+                s.close();
+                return res.body();
+            } 
+            else {
+                res.status(404);
+                return "No se encontró banda.";
+            }
+        }         
         catch (Exception e) {
             res.status(500);
-            e.printStackTrace();
-            return "error";
+            return e.toString();
         }
-        if (b != null) {
-            res.type("application/json");
-            return g.toJson(b);
-        } else {
-            res.status(404);
-            return "No se encontró banda.";
+        finally {
+            if (s != null)
+                s.close();
         }
     };
 
     public static Route actualizar = (req, res) -> {
         Gson g = new Gson();
         long id = Long.parseLong(req.params(":id"));
-        Banda bU = g.fromJson(req.body(), Banda.class);
-        Session s = HibernateUtil.getSessionFactory().openSession();
-        s.beginTransaction();
-        Banda b = s.get(Banda.class, id);
-        if (b != null) {
-            if (bU.getNumero() != null) {
-                b.setNumero(bU.getNumero());
+        Banda front = g.fromJson(req.body(), Banda.class);
+        Banda db = null;
+        Session s = null;
+        try {
+            s = HibernateUtil.getSessionFactory().openSession();
+            s.beginTransaction();
+            db = s.get(Banda.class, id);
+            if (db != null) { /* numero, nombre, miembros */
+                if (front.getNumero() == null) {
+                    front.setNumero(db.getNumero());
+                }
+                if (front.getNombre() == null || front.getNombre().equals("")) {
+                    front.setNombre(db.getNombre());
+                }            
+                if (front.getMiembros() == null) {
+                    front.setMiembros(db.getMiembros());
+                }
+                s.merge(front);
+                s.getTransaction().commit();                
+                res.type("application/json");
+                res.body(g.toJson(front));
+                s.close();
+                return res.body();
+            }            
+            else {
+                res.status(404);
+                return "No se encontró banda.";
             }
-            if (bU.getNombre() != null) {
-                b.setNombre(bU.getNombre());
-            }
-            /*
-            if (bU.getCantidadMiembros() != null) {
-                b.setCantidadMiembros(bU.getCantidadMiembros());
-            }
-            */
-            s.update(b);
-            s.getTransaction().commit();
-            s.close();
-            res.type("application/json");
-            return g.toJson(b);
-        } else {
-            res.status(404);
-            return "No se encontró banda.";
+        }
+        catch (Exception e) {
+            res.status(500);
+            return e.toString();
+        }
+        finally {
+            if (s != null)
+                s.close();
         }
     };
 
     public static Route borrar = (req, res) -> {
         Gson g = new Gson();
         long id = Long.parseLong(req.params(":id"));
-        Session s = HibernateUtil.getSessionFactory().openSession();
-        s.beginTransaction();
-        Banda b = s.get(Banda.class, id);
-        if (b != null) {
-            s.delete(b);
-            s.getTransaction().commit();
-            s.close();
-            res.type("application/json");
-            return g.toJson(b);
-        } else {
-            res.status(404);
-            return "No se encontró banda.";
+        Banda x = null;
+        Session s = null;
+        try {
+            s = HibernateUtil.getSessionFactory().openSession();
+            s.beginTransaction();
+            x = s.get(Banda.class, id);
+            if (x != null) {            
+                res.type("application/json");
+                res.body(g.toJson(x));
+                s.remove(x);
+                s.getTransaction().commit();                
+                s.close();
+                return res.body();                
+            } 
+            else {
+                res.status(404);
+                return "No se encontró banda.";
+            }
+        }
+        catch (Exception e) {
+            res.status(500);
+            return e.toString();
+        }
+        finally {
+            if (s != null)
+                s.close();
         }
     };
 

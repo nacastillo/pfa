@@ -6,11 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Data
 @Entity
@@ -26,17 +23,14 @@ public class Contrato implements Serializable {
     @Column (nullable = false, unique = true)
     private Integer codigo;
     
-    @Column (nullable = false)
-    //private LocalDate fecha;
-    private String fecha;
+    @Column (nullable = false)    
+    private String fecha;    
+        
+    @Column
+    private Long vigilante;    
     
-    @ManyToOne
-    @JoinColumn (nullable = false) // borrado name con _id
-    private Usuario vigilante;
-    
-    @ManyToOne
-    @JoinColumn (nullable = false) // borrado name con _id
-    private Sucursal sucursal;
+    @Column    
+    private Long sucursal;
     
     @Column (nullable = false)
     private Boolean armado;

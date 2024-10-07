@@ -10,6 +10,9 @@ import jakarta.persistence.Entity;
 
 public class Administrador extends Usuario {    
     
+    public Administrador () {
+    }
+    
     public Administrador (String usr, String pwd) {
         super(usr, pwd);        
     }

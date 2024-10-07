@@ -24,9 +24,10 @@ public class HibernateUtil {
                 Metadata metadata = sources.getMetadataBuilder().build();
                 sessionFactory = metadata.getSessionFactoryBuilder().build();
                 logger.info("Hibernate SessionFactory created successfully.");
-            } catch (Exception e) {                   
+            } 
+            catch (Exception e) {                   
                 logger.error("Error creating Hibernate SessionFactory.", e);
-                //e.printStackTrace();
+                e.printStackTrace();
                 if (registry != null) {
                     StandardServiceRegistryBuilder.destroy(registry);
                 }

@@ -1,32 +1,55 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE hibernate-configuration PUBLIC
 "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+"https://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<!-- 
+    viejo: http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd 
+-->
 
 <hibernate-configuration>
     <session-factory>
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://127.0.0.1:3306/pfa</property>
-        <property name="hibernate.connection.username">admin</property>
-        <property name="hibernate.connection.password">admin</property>
-        <property name="hibernate.show_sql">true</property>
-        <!-- <property name="hibernate.query.factory_class">org.hibernate.hql.internal.classic.ClassicQueryTranslatorFactory</property> -->
-        <property name="hibernate.query.factory_class">org.hibernate.hql.internal.QueryTranslatorFactoryInitiator</property>
-
-        <property name="hibernate.hbm2ddl.auto">update</property>        
-        
-        <mapping class="pfa.modelo.Banda"></mapping>         
-        <mapping class="pfa.modelo.Detenido"></mapping>
-        <mapping class="pfa.modelo.Asalto"></mapping>
-        <mapping class="pfa.modelo.Contrato"></mapping>
-        <mapping class="pfa.modelo.Entidad"></mapping>
-        <mapping class="pfa.modelo.Juez"></mapping>
-        <mapping class="pfa.modelo.Sucursal"></mapping>
-        <mapping class="pfa.modelo.Usuario"></mapping>   
-	<mapping class="pfa.modelo.Vigilante"/>
-        <mapping class="pfa.modelo.Investigador"/>
-        <mapping class="pfa.modelo.Administrador"/>      
-        
+        <!--
+            <property name="hibernate.dialect">
+                org.hibernate.dialect.MySQLDialect
+            </property> 
+        -->
+        <property name="hibernate.connection.driver_class">
+            com.mysql.cj.jdbc.Driver
+        </property>
+        <property name="hibernate.connection.url">
+            jdbc:mysql://127.0.0.1:3306/pfa            
+            </property>
+        <property name="hibernate.connection.username">
+            admin
+        </property>
+        <property name="hibernate.connection.password">
+            admin
+        </property>
+        <property name="hibernate.show_sql">
+            true
+        </property>
+        <!-- 
+            <property name="hibernate.query.factory_class">
+                org.hibernate.hql.internal.classic.ClassicQueryTranslatorFactory
+            </property> 
+        -->
+        <property name="hibernate.query.factory_class">
+            org.hibernate.hql.internal.QueryTranslatorFactoryInitiator
+        </property>
+        <property name="hibernate.hbm2ddl.auto">
+            update
+        </property>
+        <mapping class="pfa.modelo.Banda" />
+        <mapping class="pfa.modelo.Detenido" />
+        <mapping class="pfa.modelo.Asalto" />
+        <mapping class="pfa.modelo.Contrato" />
+        <mapping class="pfa.modelo.Entidad" />
+        <mapping class="pfa.modelo.Juez" />
+        <mapping class="pfa.modelo.Sucursal" />
+        <mapping class="pfa.modelo.Usuario" />
+	    <mapping class="pfa.modelo.Vigilante" />
+        <mapping class="pfa.modelo.Investigador" />
+        <mapping class="pfa.modelo.Administrador" />
     </session-factory>
 </hibernate-configuration>
